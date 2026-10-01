@@ -29,10 +29,36 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>flutter_application_1</title>
+  <title>Web Absensi Kelas</title>
   <link rel="manifest" href="manifest.json">
+  <style>
+    body { margin: 0; background: #f8f9ff; }
+    #loading {
+      position: fixed; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 16px;
+      background: #f8f9ff; font-family: system-ui, sans-serif; color: #0b1c30;
+      transition: opacity .4s ease;
+    }
+    #loading.hide { opacity: 0; pointer-events: none; }
+    .spin {
+      width: 44px; height: 44px; border: 4px solid #dbe1ff;
+      border-top-color: #0053db; border-radius: 50%; animation: sp 0.8s linear infinite;
+    }
+    @keyframes sp { to { transform: rotate(360deg); } }
+    #loading p { margin: 0; font-size: 14px; color: #737686; }
+  </style>
 </head>
 <body>
+  <div id="loading">
+    <div class="spin"></div>
+    <p>Memuat Web Absensi Kelas...</p>
+  </div>
   <script src="flutter_bootstrap.js" async></script>
+  <script>
+    window.addEventListener('flutter-first-frame', function () {
+      var el = document.getElementById('loading');
+      if (el) { el.classList.add('hide'); setTimeout(function(){ el.remove(); }, 400); }
+    });
+  </script>
 </body>
 </html>

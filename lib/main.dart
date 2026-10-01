@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'features/auth/screens/login_screen.dart';
+import 'features/student/screens/student_dashboard_screen.dart';
+import 'features/student/screens/attendance_join_screen.dart';
+import 'features/student/screens/leave_request_screen.dart';
+import 'features/lecturer/screens/lecturer_dashboard_screen.dart';
+import 'features/lecturer/screens/attendance_recap_screen.dart';
 import 'screens/home_screen.dart';
 
 Future<void> main() async {
@@ -12,19 +18,19 @@ class AttendanceApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Aplikasi Absensi Wajah',
+      title: 'Web Absensi Kelas',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF6366F1),
+          seedColor: const Color(0xFF0053DB),
           brightness: Brightness.light,
         ),
         appBarTheme: const AppBarTheme(
           centerTitle: true,
           elevation: 0,
           backgroundColor: Colors.transparent,
-          foregroundColor: Color(0xFF1E1B4B),
+          foregroundColor: Color(0xFF0B1C30),
           scrolledUnderElevation: 0,
         ),
         cardTheme: CardTheme(
@@ -60,7 +66,7 @@ class AttendanceApp extends StatelessWidget {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: const BorderSide(
-              color: Color(0xFF6366F1),
+              color: Color(0xFF0053DB),
               width: 2,
             ),
           ),
@@ -72,7 +78,7 @@ class AttendanceApp extends StatelessWidget {
           ),
         ),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: const Color(0xFF6366F1),
+          backgroundColor: const Color(0xFF0053DB),
           foregroundColor: Colors.white,
           elevation: 4,
           shape: RoundedRectangleBorder(
@@ -80,7 +86,16 @@ class AttendanceApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const HomeScreen(),
+      routes: {
+        '/': (context) => const LoginScreen(),
+        '/home': (context) => const HomeScreen(),
+        '/student-dashboard': (context) => const StudentDashboardScreen(),
+        '/attendance-join': (context) => const AttendanceJoinScreen(),
+        '/leave-request': (context) => const LeaveRequestScreen(),
+        '/lecturer-dashboard': (context) => const LecturerDashboardScreen(),
+        '/attendance-recap': (context) => const AttendanceRecapScreen(),
+      },
+      initialRoute: '/',
     );
   }
 }
