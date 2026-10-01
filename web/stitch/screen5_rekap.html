@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/>
+<style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="vendor/tailwind.js"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface":"#f8f9ff","on-primary-container":"#eeefff","outline":"#737686","on-error":"#ffffff","tertiary-fixed":"#e9ddff","secondary-fixed":"#6ffbbe","error":"#ba1a1a","outline-variant":"#c3c6d7","secondary-fixed-dim":"#4edea3","surface-container":"#e5eeff","on-primary":"#ffffff","error-container":"#ffdad6","tertiary-container":"#7d4ce7","on-secondary":"#ffffff","on-secondary-container":"#00714d","secondary-container":"#6cf8bb","inverse-on-surface":"#eaf1ff","on-surface":"#0b1c30","surface-dim":"#cbdbf5","surface-variant":"#d3e4fe","on-secondary-fixed":"#002113","primary-fixed-dim":"#b4c5ff","secondary":"#006c49","tertiary-fixed-dim":"#d0bcff","inverse-primary":"#b4c5ff","inverse-surface":"#213145","on-surface-variant":"#434655","surface-tint":"#0053db","surface-container-low":"#eff4ff","background":"#f8f9ff","surface-container-high":"#dce9ff","on-primary-fixed-variant":"#003ea8","on-tertiary-fixed":"#23005c","on-primary-fixed":"#00174b","surface-container-highest":"#d3e4fe","on-background":"#0b1c30","tertiary":"#632ecd","on-tertiary-fixed-variant":"#5516be","surface-container-lowest":"#ffffff","primary":"#004ac6","on-tertiary":"#ffffff","on-secondary-fixed-variant":"#005236","on-tertiary-container":"#f6edff","on-error-container":"#93000a","primary-container":"#2563eb","surface-bright":"#f8f9ff","primary-fixed":"#dbe1ff"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-md":"1rem","space-lg":"1.5rem","space-xs":"0.25rem","margin-mobile":"1rem","margin":"2rem","space-xl":"2rem","gutter":"1.5rem","gutter-mobile":"0.75rem","space-sm":"0.5rem"},"fontFamily":{"label-md":["Inter"],"body-sm":["Inter"],"body-md":["Inter"],"display-lg":["Inter"],"headline-sm":["Inter"],"display-lg-mobile":["Inter"],"headline-lg":["Inter"],"body-lg":["Inter"],"label-sm":["Inter"],"headline-md":["Inter"],"label-lg":["Inter"]},"fontSize":{"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"display-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-sm":["16px",{"lineHeight":"24px","fontWeight":"600"}],"display-lg-mobile":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"700"}],"headline-lg":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-md":["20px",{"lineHeight":"28px","fontWeight":"600"}],"label-lg":["14px",{"lineHeight":"20px","fontWeight":"600"}]}}}};</script><link rel="stylesheet" href="vendor/fonts/inter.css"><link rel="stylesheet" href="vendor/fonts/materialsymbols.css"></head><body class="bg-surface font-body-md text-body-md text-on-surface"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center gap-space-sm bg-surface-container-lowest"><img alt="Logo Absensi Kelas" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XqB4C-UScRa2XuiPY8KtZJOtKPpYh8Px3L8P15eISeby3hLEOdIj_dKcTdPGzfXrmUvlWx_sAXGH8COibB5cSjlQdFyXXRbX2vbemCNOiZjPAzazCPkUjEx383D4NrzcTrSbRmTCidtiVbCcHBnZumHSxdMecrNr2GtsInKQvcr81HSZZMzx-2ciUFzLI_DbtuDtVeluZXUhvIW-AQGM5nbfwdNR5tT1ge_W0gx_osNIBi4bMlGuFj7RDP"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary leading-tight">Absensi Kelas</span><span class="font-label-sm text-label-sm text-on-surface-variant leading-none">Sistem Presensi Kampus</span></div></div><div class="px-space-md py-space-sm"><div class="px-space-sm py-space-xs font-label-sm text-label-sm uppercase tracking-wider text-outline">Menu Navigasi</div></div><nav class="flex flex-col gap-space-xs px-space-md" data-active-classes="bg-primary text-on-primary font-label-lg rounded-xl shadow-[0_1px_3px_0_rgba(15,23,42,0.05)]"><a class="flex items-center gap-space-sm px-space-md py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-lg text-label-lg" data-path="dashboard-mahasiswa" href="#"><span class="material-symbols-outlined text-xl">dashboard</span><span>Dashboard Mahasiswa</span></a><a class="flex items-center gap-space-sm px-space-md py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-lg text-label-lg" data-path="absen-kelas" href="#"><span class="material-symbols-outlined text-xl">qr_code_scanner</span><span>Absen Kelas</span></a><a class="flex items-center gap-space-sm px-space-md py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-lg text-label-lg" data-path="dashboard-dosen" href="#"><span class="material-symbols-outlined text-xl">co_present</span><span>Dashboard Dosen</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-3 transition-colors bg-primary text-on-primary font-label-lg rounded-xl shadow-[0_1px_3px_0_rgba(15,23,42,0.05)]" data-path="rekap-kehadiran" href="#"><span class="material-symbols-outlined text-xl">table_chart</span><span>Rekap Kehadiran</span></a><a class="flex items-center gap-space-sm px-space-md py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-lg text-label-lg" data-path="pengajuan-izin-sakit" href="#"><span class="material-symbols-outlined text-xl">event_note</span><span>Pengajuan Izin/Sakit</span></a></nav></div><div class="p-space-md"><div class="bg-surface-container-low rounded-xl p-space-sm flex items-center justify-between gap-space-xs"><div class="flex items-center gap-space-sm overflow-hidden"><img alt="Profile" class="w-8 h-8 rounded-full object-cover shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCnNNsW8Y0HKzsTnhbXYDlqGSJibnA9KUjczIRgj0-MkGXAQqp_gOzOy9zuIrAkf20RsN5-NQ4e8vle5_TCaOz22r8SZi-GnZMIP4-D7IE9x0E2d_0hcSJwrhCMdrvJLtK_6m59OA0WijdPMR_iMOKWwpxjJddkd5v-8UJlxKKHo47dZT4fJdbBlxmsVRnhMEf45OQdI3aAdMf0BaHuKl5r_7KW5eW52SAcB9u1HgwDgS6vCU1216XYA"/><div class="flex flex-col min-w-0"><span class="font-label-md text-label-md text-on-surface truncate">Ahmad Fauzi</span><span class="font-label-sm text-label-sm text-outline truncate">NIM 2108107010</span><span class="font-label-sm text-label-sm text-primary font-semibold truncate">Mahasiswa - TI</span></div></div><a class="p-space-xs rounded-lg text-outline hover:text-error hover:bg-error-container/40 transition-colors shrink-0 flex items-center justify-center" data-path="login" href="#" title="Keluar Sistem"><span class="material-symbols-outlined text-xl">logout</span></a></div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface-container-lowest/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md"><span class="material-symbols-outlined text-lg text-outline">calendar_today</span><span>Kamis, 24 Oktober 2024</span></div><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span><span>Semester Genap 2024/2025</span></div></div><div class="flex items-center gap-space-md"><button class="relative p-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-2xl">notifications</span><span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-error ring-2 ring-surface-container-lowest"></span></button><div class="flex items-center gap-space-sm pl-space-sm"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCnNNsW8Y0HKzsTnhbXYDlqGSJibnA9KUjczIRgj0-MkGXAQqp_gOzOy9zuIrAkf20RsN5-NQ4e8vle5_TCaOz22r8SZi-GnZMIP4-D7IE9x0E2d_0hcSJwrhCMdrvJLtK_6m59OA0WijdPMR_iMOKWwpxjJddkd5v-8UJlxKKHo47dZT4fJdbBlxmsVRnhMEf45OQdI3aAdMf0BaHuKl5r_7KW5eW52SAcB9u1HgwDgS6vCU1216XYA"/><div class="hidden md:flex flex-col text-left"><span class="font-label-md text-label-md text-on-surface leading-tight">Ahmad Fauzi</span><span class="font-label-sm text-label-sm text-outline leading-tight">Online</span></div></div></div></header><main class="w-full pt-16 bg-surface min-h-screen px-space-xl py-space-xl"><div class="flex flex-col w-full gap-space-lg">
+<!-- Top Banner / Header Context -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-lowest p-space-lg shadow-sm">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md relative z-10">
+<div class="flex flex-col gap-1 max-w-2xl">
+<div class="inline-flex items-center gap-2 text-primary font-label-md text-label-md">
+<span class="material-symbols-outlined text-lg">fact_check</span>
+<span>Sistem Akademik Terpadu</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Rekapitulasi Kehadiran Mahasiswa</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Monitoring presensi komprehensif, evaluasi kehadiran kumulatif, serta kalkulasi otomatis ambang batas kelayakan ujian akhir semester.
+        </p>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-space-sm shrink-0 flex-wrap">
+<button class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-lg text-label-lg shadow-sm transition-all active:scale-95 group" type="button">
+<span class="material-symbols-outlined text-error text-xl group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">picture_as_pdf</span>
+<span>Export PDF</span>
+</button>
+<button class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-secondary-container hover:bg-secondary-fixed text-on-secondary-container font-label-lg text-label-lg shadow-sm transition-all active:scale-95 group" type="button">
+<span class="material-symbols-outlined text-secondary text-xl group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">table_view</span>
+<span>Export Excel</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Integrated Filter Bar -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-space-md items-end">
+<!-- Matakuliah Dropdown -->
+<div class="md:col-span-4 flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1" for="filter-matkul">
+<span class="material-symbols-outlined text-base text-primary">school</span>
+<span>Mata Kuliah</span>
+</label>
+<div class="relative">
+<select class="w-full h-11 pl-3.5 pr-10 rounded-lg bg-surface-container-low font-body-md text-body-md text-on-surface focus:outline-none focus:bg-surface-container-lowest appearance-none shadow-sm cursor-pointer transition-colors" id="filter-matkul">
+<option selected="">Pemrograman Web Lanjut (3 SKS)</option>
+<option>Rekayasa Perangkat Lunak (3 SKS)</option>
+<option>Struktur Data &amp; Algoritma (4 SKS)</option>
+<option>Kecerdasan Buatan (3 SKS)</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-3 top-2.5 text-outline text-xl">keyboard_arrow_down</span>
+</div>
+</div>
+<!-- Kelas Dropdown -->
+<div class="md:col-span-3 flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1" for="filter-kelas">
+<span class="material-symbols-outlined text-base text-primary">group</span>
+<span>Kelas Mahasiswa</span>
+</label>
+<div class="relative">
+<select class="w-full h-11 pl-3.5 pr-10 rounded-lg bg-surface-container-low font-body-md text-body-md text-on-surface focus:outline-none focus:bg-surface-container-lowest appearance-none shadow-sm cursor-pointer transition-colors" id="filter-kelas">
+<option selected="">Kelas A (Reguler)</option>
+<option>Kelas B (Reguler)</option>
+<option>Kelas C (Karyawan)</option>
+<option>Kelas Eksekutif</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-3 top-2.5 text-outline text-xl">keyboard_arrow_down</span>
+</div>
+</div>
+<!-- Periode Dropdown -->
+<div class="md:col-span-3 flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1" for="filter-periode">
+<span class="material-symbols-outlined text-base text-primary">calendar_month</span>
+<span>Periode / Semester</span>
+</label>
+<div class="relative">
+<select class="w-full h-11 pl-3.5 pr-10 rounded-lg bg-surface-container-low font-body-md text-body-md text-on-surface focus:outline-none focus:bg-surface-container-lowest appearance-none shadow-sm cursor-pointer transition-colors" id="filter-periode">
+<option selected="">Oktober 2024 / Semester Genap</option>
+<option>September 2024 / Semester Genap</option>
+<option>Agustus 2024 / Semester Genap</option>
+<option>Semester Ganjil 2023/2024</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-3 top-2.5 text-outline text-xl">keyboard_arrow_down</span>
+</div>
+</div>
+<!-- Quick Reset / Status Button -->
+<div class="md:col-span-2 flex">
+<button class="w-full h-11 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2 hover:bg-primary-container shadow-sm transition-all active:scale-95" type="button">
+<span class="material-symbols-outlined text-xl">tune</span>
+<span>Terapkan</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Metric Summary Bento Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Metric 1: Average Attendance -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-lowest p-space-lg shadow-sm flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-outline uppercase tracking-wider">Rata-rata Kehadiran</span>
+<span class="font-display-lg text-display-lg text-on-surface font-bold mt-1">92.4%</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+</div>
+</div>
+<div class="mt-4 pt-3 flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span>Sangat Baik (&gt;85%)</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline">+2.1% dari minggu lalu</span>
+</div>
+<!-- Micro visual progress bar -->
+<div class="w-full bg-surface-container-low h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 92.4%"></div>
+</div>
+</div>
+<!-- Metric 2: Critical Students -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-lowest p-space-lg shadow-sm flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-outline uppercase tracking-wider">Mahasiswa Kritis (&lt;75%)</span>
+<span class="font-display-lg text-display-lg text-error font-bold mt-1">2 Orang</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-error-container text-on-error-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+</div>
+<div class="mt-4 pt-3 flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-error font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-sm">crisis_alert</span>
+<span>Perlu Konfirmasi Dosen</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline">NIM 2108107018 &amp; 024</span>
+</div>
+<!-- Micro visual alert line -->
+<div class="w-full bg-surface-container-low h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-error h-full rounded-full" style="width: 14%"></div>
+</div>
+</div>
+<!-- Metric 3: Session Completed -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-lowest p-space-lg shadow-sm flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-outline uppercase tracking-wider">Pertemuan Berjalan</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-display-lg text-display-lg text-primary font-bold">7</span>
+<span class="font-headline-md text-headline-md text-outline">/ 16 Sesi</span>
+</div>
+</div>
+<div class="w-12 h-12 rounded-xl bg-primary-fixed text-on-primary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">event_available</span>
+</div>
+</div>
+<div class="mt-4 pt-3 flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-primary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span>43.7% Semester Selesai</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline">P8 Ujian Tengah Smt</span>
+</div>
+<!-- Micro visual session line -->
+<div class="w-full bg-surface-container-low h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 43.75%"></div>
+</div>
+</div>
+</div>
+<!-- Legend & Quick Filter Ribbon -->
+<div class="bg-surface-container-lowest px-space-md py-3 rounded-xl shadow-sm flex flex-wrap items-center justify-between gap-space-sm text-on-surface">
+<div class="flex items-center gap-space-md flex-wrap">
+<span class="font-label-md text-label-md text-outline">Keterangan Presensi:</span>
+<div class="inline-flex items-center gap-1.5">
+<span class="w-5 h-5 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm text-label-sm font-bold flex items-center justify-center">H</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Hadir</span>
+</div>
+<div class="inline-flex items-center gap-1.5">
+<span class="w-5 h-5 rounded-md bg-[#FEF3C7] text-[#92400E] font-label-sm text-label-sm font-bold flex items-center justify-center">I</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Izin</span>
+</div>
+<div class="inline-flex items-center gap-1.5">
+<span class="w-5 h-5 rounded-md bg-[#EDE9FE] text-[#5B21B6] font-label-sm text-label-sm font-bold flex items-center justify-center">S</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Sakit</span>
+</div>
+<div class="inline-flex items-center gap-1.5">
+<span class="w-5 h-5 rounded-md bg-[#FEE2E2] text-[#991B1B] font-label-sm text-label-sm font-bold flex items-center justify-center">A</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Alfa (Tanpa Keterangan)</span>
+</div>
+</div>
+<!-- Live Search Table Field -->
+<div class="relative w-full sm:w-64">
+<input class="w-full h-9 pl-9 pr-3 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-on-surface focus:outline-none focus:bg-surface-container-lowest shadow-sm placeholder:text-outline" id="searchInput" placeholder="Cari nama / NIM..." type="text"/>
+<span class="material-symbols-outlined absolute left-2.5 top-2 text-outline text-lg">search</span>
+</div>
+</div>
+<!-- Main Data Table Container -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left border-collapse" id="attendanceTable">
+<thead>
+<tr class="bg-surface-container-low font-label-sm text-label-sm uppercase tracking-wider text-outline select-none">
+<th class="py-3.5 px-4 text-center w-12">No</th>
+<th class="py-3.5 px-4 min-w-[140px]">NIM</th>
+<th class="py-3.5 px-4 min-w-[220px]">Nama Mahasiswa</th>
+<th class="py-3.5 px-2 text-center w-10">P1</th>
+<th class="py-3.5 px-2 text-center w-10">P2</th>
+<th class="py-3.5 px-2 text-center w-10">P3</th>
+<th class="py-3.5 px-2 text-center w-10">P4</th>
+<th class="py-3.5 px-2 text-center w-10">P5</th>
+<th class="py-3.5 px-2 text-center w-10">P6</th>
+<th class="py-3.5 px-2 text-center w-10 bg-primary-fixed/20 text-primary font-bold">P7</th>
+<th class="py-3.5 px-4 text-center min-w-[90px]">Total Hadir</th>
+<th class="py-3.5 px-4 text-right min-w-[100px]">Persentase</th>
+<th class="py-3.5 px-4 text-center min-w-[180px]">Status Kelayakan UAS</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low font-body-md text-body-md text-on-surface">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3.5 px-4 text-center font-label-sm text-outline">1</td>
+<td class="py-3.5 px-4 font-mono text-body-sm font-medium text-on-surface">2108107001</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover shrink-0" data-alt="Close-up professional headshot of Indonesian student Aditya Pratama smiling in a modern campus setting, cinematic natural daylight, subtle blue university polo shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJit_r-Mk82HqlPFqofxtQPJtdrj3QX7583ljrGNAtXZs0GYuZf5nVugbuyzehLPf1vUereNceX1b1mDw35TnYVAcksrXlEt7_BBF1w9-AaCZ1EwMUXSVOYcFQsOcc2fPF0dfQhfLAg9NDXSvrIESlZn-bi--yLuFavsRT7CNCrX5xUVQk2vjeMKwsJr79VOlyb2vfspxwARVVDRDLzyMpPO6ov_b7JP69rQdA9UELIYbLTdiQ_Wxk-g"/>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Aditya Pratama</span>
+<span class="font-label-sm text-label-sm text-outline truncate">Teknik Informatika</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center bg-primary-fixed/10"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-4 text-center font-label-md text-label-md">7 / 7</td>
+<td class="py-3.5 px-4 text-right font-label-md text-label-md text-secondary">100.0%</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D1FAE5] text-[#065F46] font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+<span>Memenuhi Syarat</span>
+</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3.5 px-4 text-center font-label-sm text-outline">2</td>
+<td class="py-3.5 px-4 font-mono text-body-sm font-medium text-on-surface">2108107005</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover shrink-0" data-alt="Portrait of an Indonesian female university student Bella Safitri wearing cream pastel hijab in computer laboratory with gentle warm indoor illumination" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBG7YRWqikVmkAO_CcmnUUZgiEiusBJl-Vq1rCjQLeg8csyxfU7n98BPWQWSH61zr6TeLp37u2ngfjrRunVhChHn2DUZ3HDV8tExMMH9RxEoKHlVjBhjZzMYfytP_9yaeSL928JjMd1_4MIbx6Og6recEXk-Q7MJsLzS9WIP72pPbYs2qY0cMvCuBphwJVneyII99KGnQq_7g53IbxVxhnc_ikIxgvXplwG48t5ZVz5-UN5scrBPKijZQ"/>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Bella Safitri</span>
+<span class="font-label-sm text-label-sm text-outline truncate">Teknik Informatika</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#FEF3C7] text-[#92400E] font-label-sm font-bold items-center justify-center">I</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center bg-primary-fixed/10"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-4 text-center font-label-md text-label-md">6 / 7</td>
+<td class="py-3.5 px-4 text-right font-label-md text-label-md text-secondary">85.7%</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D1FAE5] text-[#065F46] font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+<span>Memenuhi Syarat</span>
+</span>
+</td>
+</tr>
+<!-- Row 3: Critical Student Warning -->
+<tr class="hover:bg-error-container/20 transition-colors bg-error-container/10">
+<td class="py-3.5 px-4 text-center font-label-sm text-outline">3</td>
+<td class="py-3.5 px-4 font-mono text-body-sm font-medium text-error">2108107018</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover shrink-0" data-alt="Portrait of Indonesian male college student Dimas Wahyu seated in university library, wearing grey sweater with neutral background and soft cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBe-pIjnY93OZ7ZePB3nCAFGOXBmIgmNlXADvqsm8JhIdY6pLpVTLA8dARgkdo2HVszSaQ8rfQKTFRVKMrs6b1ghXLrbnhc2-HlbQivjUSjUwCBg8qPp5aA-6VNdI2bxf830JB9uRulC2OuXJFCNxqcRdOmtxoqBEgLIX39sjwc_np_fxkIqx_z1m22iavvPSVDRJrQ7uASzRd3okpSzp2n0XRwGIXlUY_WYBuiAT8FgQ7VIdO4g4DiUA"/>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Dimas Wahyu</span>
+<span class="font-label-sm text-label-sm text-error truncate font-medium">Batas Presensi Rendah</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#FEE2E2] text-[#991B1B] font-label-sm font-bold items-center justify-center">A</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#EDE9FE] text-[#5B21B6] font-label-sm font-bold items-center justify-center">S</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#FEE2E2] text-[#991B1B] font-label-sm font-bold items-center justify-center">A</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center bg-primary-fixed/10"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-4 text-center font-label-md text-label-md text-error">4 / 7</td>
+<td class="py-3.5 px-4 text-right font-label-md text-label-md text-error font-bold">57.1%</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FEE2E2] text-[#991B1B] font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-[#EF4444]"></span>
+<span>Peringatan Kehadiran</span>
+</span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3.5 px-4 text-center font-label-sm text-outline">4</td>
+<td class="py-3.5 px-4 font-mono text-body-sm font-medium text-on-surface">2108107021</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover shrink-0" data-alt="Portrait photo of young Southeast Asian female student Fadhilah Nurul holding notebook, wearing glasses, soft daylight study hall aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCea8ikdA7t1YvQx42CptebcKBTHzDJUvLxJQZXeLYWjIieB1c5JhBfi1tvnBxVyB4xJoylD18H9X1bn48n7iFApw-dtIkOpSBCWlgJstSwBllh2B9nw-wSoV-VgnP7hsZ2D-RXet_GMvYzz5kCW9FUHRpOUcf3qMBhOMUsd7-u7jL17aKr4kDDtIiaW_e1ZVPk8MHTDZhRyUA50xOOis64Ea8fsF2yz7Il4FBJtqKAzTwbB1GPBN2FDQ"/>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Fadhilah Nurul</span>
+<span class="font-label-sm text-label-sm text-outline truncate">Teknik Informatika</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#FEF3C7] text-[#92400E] font-label-sm font-bold items-center justify-center">I</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center bg-primary-fixed/10"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-4 text-center font-label-md text-label-md">6 / 7</td>
+<td class="py-3.5 px-4 text-right font-label-md text-label-md text-secondary">85.7%</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D1FAE5] text-[#065F46] font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+<span>Memenuhi Syarat</span>
+</span>
+</td>
+</tr>
+<!-- Row 5: Critical Student Warning -->
+<tr class="hover:bg-error-container/20 transition-colors bg-error-container/10">
+<td class="py-3.5 px-4 text-center font-label-sm text-outline">5</td>
+<td class="py-3.5 px-4 font-mono text-body-sm font-medium text-error">2108107024</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover shrink-0" data-alt="Profile headshot of Gilang Ramadhan, Indonesian university male student in dark navy polo shirt looking attentive, crisp clean studio portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDew2EqfTPeBU4H7Sj7lkZgHSfbMqbg9FLQkL9w-BkzlpMi2Vb2xdpNzR5GjjBvmuJsNuwJj88ZFeOQbm-y0RT8pIQ7Ckv6--c_D8A8LUtDgWga7YuXTFjNGzaIO03pu2ymk-GwVweV3LNcq-LXxc4Rk2ok_k4EtDooMPxgfV5nhWLXwz4I3AD7nvlINcTzghv58Merz36gNMZUIw_IkjI1I0MSsrCIKp2RWJT8hHB_DF5-aWkPdC6Czg"/>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Gilang Ramadhan</span>
+<span class="font-label-sm text-label-sm text-error truncate font-medium">Batas Presensi Rendah</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#FEE2E2] text-[#991B1B] font-label-sm font-bold items-center justify-center">A</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#FEE2E2] text-[#991B1B] font-label-sm font-bold items-center justify-center">A</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#EDE9FE] text-[#5B21B6] font-label-sm font-bold items-center justify-center">S</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center bg-primary-fixed/10"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-4 text-center font-label-md text-label-md text-error">4 / 7</td>
+<td class="py-3.5 px-4 text-right font-label-md text-label-md text-error font-bold">57.1%</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FEE2E2] text-[#991B1B] font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-[#EF4444]"></span>
+<span>Peringatan Kehadiran</span>
+</span>
+</td>
+</tr>
+<!-- Row 6 -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3.5 px-4 text-center font-label-sm text-outline">6</td>
+<td class="py-3.5 px-4 font-mono text-body-sm font-medium text-on-surface">2108107029</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover shrink-0" data-alt="Portrait photo of Hani Widyaningsih an Indonesian university woman with pleasant smile, wearing light green hijab and modern campus jacket" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeC2yGeA2jk7sM20TsuxNY7RwNsHHMPxtaKwDiDzypmWsoKcid39n_lC4loOZY8Kntx16EKr7MOhh3pHLCH3TvTojiuVBKdHYEsgTbYCmeF88xeNxJC6WRKVDmjDOMkpI0TepXjKo0QMz4KQlOKsjXU7AvQdn6UlZqB8M7YKlDiJW1s55P6jW8JsLMw34lXPyFsSQQ7wNIzfIsn2gFeoRI6xMo-aHSWEeRzM0NQulnQsvoQOwc8ZGSTA"/>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Hani Widyaningsih</span>
+<span class="font-label-sm text-label-sm text-outline truncate">Teknik Informatika</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#EDE9FE] text-[#5B21B6] font-label-sm font-bold items-center justify-center">S</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center bg-primary-fixed/10"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-4 text-center font-label-md text-label-md">6 / 7</td>
+<td class="py-3.5 px-4 text-right font-label-md text-label-md text-secondary">85.7%</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D1FAE5] text-[#065F46] font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+<span>Memenuhi Syarat</span>
+</span>
+</td>
+</tr>
+<!-- Row 7 -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3.5 px-4 text-center font-label-sm text-outline">7</td>
+<td class="py-3.5 px-4 font-mono text-body-sm font-medium text-on-surface">2108107033</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover shrink-0" data-alt="Portrait of Southeast Asian male university student Ilham Maulana wearing eyeglasses and casual denim jacket, soft academic background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWxMBayvCtlLPwtK_uCTrcUhcfNaxmGzMjGBAkK0lFo6x-Ylhk-CsiSJm4eawmx_2fk2eODjB04oBUPy15O5egJVNw32QVlTIEaD_qtoAq1DH-s4IoLRREnZsq4CygHyP7_rxMtA97NT0k8R339ycmn1H0JMhzB2VMXTyi7AtpLf3lNbqxNjUPSUh4ngVuiXCPrfxbg1OxMZzP6qShQH_DMi6qEtjG1e6aaW4NbuPTkJvXrNsD2qrxjw"/>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Ilham Maulana</span>
+<span class="font-label-sm text-label-sm text-outline truncate">Teknik Informatika</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#FEF3C7] text-[#92400E] font-label-sm font-bold items-center justify-center">I</span></td>
+<td class="py-3.5 px-2 text-center bg-primary-fixed/10"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-4 text-center font-label-md text-label-md">6 / 7</td>
+<td class="py-3.5 px-4 text-right font-label-md text-label-md text-secondary">85.7%</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D1FAE5] text-[#065F46] font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+<span>Memenuhi Syarat</span>
+</span>
+</td>
+</tr>
+<!-- Row 8 -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3.5 px-4 text-center font-label-sm text-outline">8</td>
+<td class="py-3.5 px-4 font-mono text-body-sm font-medium text-on-surface">2108107037</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover shrink-0" data-alt="Portrait of Indonesian college student Jessica Putri in bright auditorium with natural backlight, confident smile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwx9MW1qNSINaOAz_GMFDjDUa8uuhB0trsqOtQoaUSvmCKcL7bP9HpL99bpZTMGz9KiZWdPQaWV_oDcjPTIfHxcomwkYfiQNHtFn0a6GozWcuOQUxZx6hxDMpJTU8IAuaMAeTalOcwQSiWiIQGqKhYatkEv-ePIwVJnLlHcXUl9pmiacFIBy2wEyqn5cWeu6z9hXzGeDy2rnkuFFu7vJMkMPsopYXkC-jJiRzda3ZvxUrM4FrbGn0OzA"/>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Jessica Putri</span>
+<span class="font-label-sm text-label-sm text-outline truncate">Teknik Informatika</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center bg-primary-fixed/10"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-4 text-center font-label-md text-label-md">7 / 7</td>
+<td class="py-3.5 px-4 text-right font-label-md text-label-md text-secondary">100.0%</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D1FAE5] text-[#065F46] font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+<span>Memenuhi Syarat</span>
+</span>
+</td>
+</tr>
+<!-- Row 9 -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3.5 px-4 text-center font-label-sm text-outline">9</td>
+<td class="py-3.5 px-4 font-mono text-body-sm font-medium text-on-surface">2108107042</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover shrink-0" data-alt="Portrait of an Indonesian male student Kevin Sanjaya wearing checkered flannel shirt on university campus lawn, pleasant natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUFMYYlER4vT_sANQoexj8ZvwmlYVYQB1UWz-AD_HZc5q8Iy-MXv0azD4nW4T8m9tzJzk9JEHvsTJhg0aEqZItlaeRq-ugylsp3Gh84xGrKmXErAbIXrNXR-Yy0EaFBJEHWI5Z0Ho3jEbBRZ6Fd1U4-mTkLJEq59t-CD-0ywwJu_XukeIopGBuzxXdshMXFnS3OcrAHzFsjBYpTt-6Cyhx-Hb1cd0cYqFtYg1YggJ4qk2ZmeGWJ713Zg"/>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Kevin Sanjaya</span>
+<span class="font-label-sm text-label-sm text-outline truncate">Teknik Informatika</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#FEF3C7] text-[#92400E] font-label-sm font-bold items-center justify-center">I</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center bg-primary-fixed/10"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-4 text-center font-label-md text-label-md">6 / 7</td>
+<td class="py-3.5 px-4 text-right font-label-md text-label-md text-secondary">85.7%</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D1FAE5] text-[#065F46] font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+<span>Memenuhi Syarat</span>
+</span>
+</td>
+</tr>
+<!-- Row 10 -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3.5 px-4 text-center font-label-sm text-outline">10</td>
+<td class="py-3.5 px-4 font-mono text-body-sm font-medium text-on-surface">2108107049</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover shrink-0" data-alt="Portrait of young Indonesian female university student Larasati Dewi wearing modern smart casual attire in tech university hallway" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApDrsMPJZibAT8R_H_r5VaQ0wLhj2KbFjTDC-jlc1zFr-T0Gx9VdEVKO2p8fLZOBh54UhDQI087EcSLznuvgJWFs5-GPP8QlhdLqVcUMy-96JVz9KUSLIJ6iZoHE8K78XSzrXlyHwjB0t4FG7_1J6C528-qc4vx6tXmha1m_n8uzbITtnA5e9NIgoqHt3iZCgTmVPSRkw7LxhlvkU3c0hhFq0OElwe0NsTMjWDXNOu_dmwP5cy4g5lIg"/>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Larasati Dewi</span>
+<span class="font-label-sm text-label-sm text-outline truncate">Teknik Informatika</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-2 text-center"><span class="inline-flex w-7 h-7 rounded-md bg-[#EDE9FE] text-[#5B21B6] font-label-sm font-bold items-center justify-center">S</span></td>
+<td class="py-3.5 px-2 text-center bg-primary-fixed/10"><span class="inline-flex w-7 h-7 rounded-md bg-[#D1FAE5] text-[#065F46] font-label-sm font-bold items-center justify-center">H</span></td>
+<td class="py-3.5 px-4 text-center font-label-md text-label-md">6 / 7</td>
+<td class="py-3.5 px-4 text-right font-label-md text-label-md text-secondary">85.7%</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D1FAE5] text-[#065F46] font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+<span>Memenuhi Syarat</span>
+</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer / Pagination Bar -->
+<div class="px-space-lg py-4 bg-surface-container-low flex flex-col sm:flex-row items-center justify-between gap-space-md">
+<div class="font-body-sm text-body-sm text-on-surface-variant text-center sm:text-left">
+        Menampilkan <span class="font-semibold text-on-surface">1 - 10</span> dari <span class="font-semibold text-on-surface">30</span> mahasiswa
+      </div>
+<div class="flex items-center gap-1.5">
+<button class="h-9 px-3 rounded-lg bg-surface-container-lowest text-outline opacity-50 cursor-not-allowed flex items-center justify-center font-label-sm text-label-sm shadow-sm" disabled="" type="button">
+<span class="material-symbols-outlined text-base">chevron_left</span>
+<span class="hidden sm:inline">Sebelumnya</span>
+</button>
+<button class="w-9 h-9 rounded-lg bg-primary text-on-primary font-label-sm text-label-sm flex items-center justify-center shadow-sm" type="button">
+          1
+        </button>
+<button class="w-9 h-9 rounded-lg bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-sm text-label-sm flex items-center justify-center shadow-sm transition-colors" type="button">
+          2
+        </button>
+<button class="w-9 h-9 rounded-lg bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-sm text-label-sm flex items-center justify-center shadow-sm transition-colors" type="button">
+          3
+        </button>
+<button class="h-9 px-3 rounded-lg bg-surface-container-lowest hover:bg-surface-container text-on-surface flex items-center justify-center font-label-sm text-label-sm shadow-sm transition-colors" type="button">
+<span class="hidden sm:inline">Selanjutnya</span>
+<span class="material-symbols-outlined text-base">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple interactive filter for student rows
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', function(e) {
+      const query = e.target.value.toLowerCase().trim();
+      const rows = document.querySelectorAll('#attendanceTable tbody tr');
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+      });
+    });
+  }
+</script></main></div><script>
+(function(){
+  function post(msg){ try { window.parent.postMessage(msg, '*'); } catch(e){} }
+  function txt(el){ return (el && el.innerText ? el.innerText : '').toLowerCase(); }
+  function role(){
+    var p = location.pathname;
+    if (p.indexOf('screen1_login')!==-1) return 'login';
+    if (p.indexOf('screen2_dashboard_mhs')!==-1) return 'student-dashboard';
+    if (p.indexOf('screen3_absen')!==-1) return 'attendance-join';
+    if (p.indexOf('screen4_dashboard_dosen')!==-1) return 'lecturer-dashboard';
+    if (p.indexOf('screen5_rekap')!==-1) return 'attendance-recap';
+    if (p.indexOf('screen6_izin_sakit')!==-1) return 'leave-request';
+    return 'page';
+  }
+  var R = role();
+
+  // Map keyword -> route
+  function routeFor(t, el){
+    if (t.indexOf('logout')!==-1 || t.indexOf('keluar')!==-1) return 'nav:/';
+    if (t.indexOf('scanner')!==-1 || t.indexOf('scan qr')!==-1 || t.indexOf('absen sekarang')!==-1) return 'nav:/attendance-join';
+    if (t.indexOf('pengajuan izin')!==-1 || t.indexOf('izin/sakit')!==-1 || t.indexOf('ajukan')!==-1) return 'nav:/leave-request';
+    if (t.indexOf('rekap')!==-1) return 'nav:/attendance-recap';
+    if (t.indexOf('dashboard mahasiswa')!==-1 || t.indexOf('beranda')!==-1) return 'nav:/student-dashboard';
+    if (t.indexOf('bukÃÂ° sesi')!==-1 || t.indexOf('sesi absen baru')!==-1) return 'nav:/lecturer-dashboard';
+    return null;
+  }
+
+  document.addEventListener('click', function(ev){
+    var el = ev.target.closest('button, a, [role=button], .cursor-pointer');
+    if(!el) return;
+    var t = txt(el);
+
+    if (R === 'login'){
+      if (t.indexOf('sso')!==-1){ post('nav:/student-dashboard'); return; }
+      if (t.indexOf('masuk')!==-1){
+        var idEl = document.getElementById('identifier');
+        var val = idEl ? (idEl.value||'') : '';
+        if (/dosen|lecturer|hendra/i.test(val)) post('nav:/lecturer-dashboard');
+        else post('nav:/student-dashboard');
+        return;
+      }
+    }
+
+    var r = routeFor(t, el);
+    if (r){ post(r); }
+  }, true);
+})();
+
+</script>
+</body></html>

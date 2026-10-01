@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/>
+<style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="vendor/tailwind.js"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface":"#f8f9ff","on-primary-container":"#eeefff","outline":"#737686","on-error":"#ffffff","tertiary-fixed":"#e9ddff","secondary-fixed":"#6ffbbe","error":"#ba1a1a","outline-variant":"#c3c6d7","secondary-fixed-dim":"#4edea3","surface-container":"#e5eeff","on-primary":"#ffffff","error-container":"#ffdad6","tertiary-container":"#7d4ce7","on-secondary":"#ffffff","on-secondary-container":"#00714d","secondary-container":"#6cf8bb","inverse-on-surface":"#eaf1ff","on-surface":"#0b1c30","surface-dim":"#cbdbf5","surface-variant":"#d3e4fe","on-secondary-fixed":"#002113","primary-fixed-dim":"#b4c5ff","secondary":"#006c49","tertiary-fixed-dim":"#d0bcff","inverse-primary":"#b4c5ff","inverse-surface":"#213145","on-surface-variant":"#434655","surface-tint":"#0053db","surface-container-low":"#eff4ff","background":"#f8f9ff","surface-container-high":"#dce9ff","on-primary-fixed-variant":"#003ea8","on-tertiary-fixed":"#23005c","on-primary-fixed":"#00174b","surface-container-highest":"#d3e4fe","on-background":"#0b1c30","tertiary":"#632ecd","on-tertiary-fixed-variant":"#5516be","surface-container-lowest":"#ffffff","primary":"#004ac6","on-tertiary":"#ffffff","on-secondary-fixed-variant":"#005236","on-tertiary-container":"#f6edff","on-error-container":"#93000a","primary-container":"#2563eb","surface-bright":"#f8f9ff","primary-fixed":"#dbe1ff"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-md":"1rem","space-lg":"1.5rem","space-xs":"0.25rem","margin-mobile":"1rem","margin":"2rem","space-xl":"2rem","gutter":"1.5rem","gutter-mobile":"0.75rem","space-sm":"0.5rem"},"fontFamily":{"label-md":["Inter"],"body-sm":["Inter"],"body-md":["Inter"],"display-lg":["Inter"],"headline-sm":["Inter"],"display-lg-mobile":["Inter"],"headline-lg":["Inter"],"body-lg":["Inter"],"label-sm":["Inter"],"headline-md":["Inter"],"label-lg":["Inter"]},"fontSize":{"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"display-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-sm":["16px",{"lineHeight":"24px","fontWeight":"600"}],"display-lg-mobile":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"700"}],"headline-lg":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-md":["20px",{"lineHeight":"28px","fontWeight":"600"}],"label-lg":["14px",{"lineHeight":"20px","fontWeight":"600"}]}}}};</script><link rel="stylesheet" href="vendor/fonts/inter.css"><link rel="stylesheet" href="vendor/fonts/materialsymbols.css"></head><body class="bg-surface font-body-md text-body-md text-on-surface"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center gap-space-sm bg-surface-container-lowest"><img alt="Logo Absensi Kelas" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XqB4C-UScRa2XuiPY8KtZJOtKPpYh8Px3L8P15eISeby3hLEOdIj_dKcTdPGzfXrmUvlWx_sAXGH8COibB5cSjlQdFyXXRbX2vbemCNOiZjPAzazCPkUjEx383D4NrzcTrSbRmTCidtiVbCcHBnZumHSxdMecrNr2GtsInKQvcr81HSZZMzx-2ciUFzLI_DbtuDtVeluZXUhvIW-AQGM5nbfwdNR5tT1ge_W0gx_osNIBi4bMlGuFj7RDP"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary leading-tight">Absensi Kelas</span><span class="font-label-sm text-label-sm text-on-surface-variant leading-none">Sistem Presensi Kampus</span></div></div><div class="px-space-md py-space-sm"><div class="px-space-sm py-space-xs font-label-sm text-label-sm uppercase tracking-wider text-outline">Menu Navigasi</div></div><nav class="flex flex-col gap-space-xs px-space-md" data-active-classes="bg-primary text-on-primary font-label-lg rounded-xl shadow-[0_1px_3px_0_rgba(15,23,42,0.05)]"><a class="flex items-center gap-space-sm px-space-md py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-lg text-label-lg" data-path="dashboard-mahasiswa" href="#"><span class="material-symbols-outlined text-xl">dashboard</span><span>Dashboard Mahasiswa</span></a><a class="flex items-center gap-space-sm px-space-md py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-lg text-label-lg" data-path="absen-kelas" href="#"><span class="material-symbols-outlined text-xl">qr_code_scanner</span><span>Absen Kelas</span></a><a class="flex items-center gap-space-sm px-space-md py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-lg text-label-lg" data-path="dashboard-dosen" href="#"><span class="material-symbols-outlined text-xl">co_present</span><span>Dashboard Dosen</span></a><a class="flex items-center gap-space-sm px-space-md py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-lg text-label-lg" data-path="rekap-kehadiran" href="#"><span class="material-symbols-outlined text-xl">table_chart</span><span>Rekap Kehadiran</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-3 transition-colors bg-primary text-on-primary font-label-lg rounded-xl shadow-[0_1px_3px_0_rgba(15,23,42,0.05)]" data-path="pengajuan-izin-sakit" href="#"><span class="material-symbols-outlined text-xl">event_note</span><span>Pengajuan Izin/Sakit</span></a></nav></div><div class="p-space-md"><div class="bg-surface-container-low rounded-xl p-space-sm flex items-center justify-between gap-space-xs"><div class="flex items-center gap-space-sm overflow-hidden"><img alt="Profile" class="w-8 h-8 rounded-full object-cover shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCnNNsW8Y0HKzsTnhbXYDlqGSJibnA9KUjczIRgj0-MkGXAQqp_gOzOy9zuIrAkf20RsN5-NQ4e8vle5_TCaOz22r8SZi-GnZMIP4-D7IE9x0E2d_0hcSJwrhCMdrvJLtK_6m59OA0WijdPMR_iMOKWwpxjJddkd5v-8UJlxKKHo47dZT4fJdbBlxmsVRnhMEf45OQdI3aAdMf0BaHuKl5r_7KW5eW52SAcB9u1HgwDgS6vCU1216XYA"/><div class="flex flex-col min-w-0"><span class="font-label-md text-label-md text-on-surface truncate">Ahmad Fauzi</span><span class="font-label-sm text-label-sm text-outline truncate">NIM 2108107010</span><span class="font-label-sm text-label-sm text-primary font-semibold truncate">Mahasiswa - TI</span></div></div><a class="p-space-xs rounded-lg text-outline hover:text-error hover:bg-error-container/40 transition-colors shrink-0 flex items-center justify-center" data-path="login" href="#" title="Keluar Sistem"><span class="material-symbols-outlined text-xl">logout</span></a></div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface-container-lowest/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md"><span class="material-symbols-outlined text-lg text-outline">calendar_today</span><span>Kamis, 24 Oktober 2024</span></div><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span><span>Semester Genap 2024/2025</span></div></div><div class="flex items-center gap-space-md"><button class="relative p-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-2xl">notifications</span><span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-error ring-2 ring-surface-container-lowest"></span></button><div class="flex items-center gap-space-sm pl-space-sm"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCnNNsW8Y0HKzsTnhbXYDlqGSJibnA9KUjczIRgj0-MkGXAQqp_gOzOy9zuIrAkf20RsN5-NQ4e8vle5_TCaOz22r8SZi-GnZMIP4-D7IE9x0E2d_0hcSJwrhCMdrvJLtK_6m59OA0WijdPMR_iMOKWwpxjJddkd5v-8UJlxKKHo47dZT4fJdbBlxmsVRnhMEf45OQdI3aAdMf0BaHuKl5r_7KW5eW52SAcB9u1HgwDgS6vCU1216XYA"/><div class="hidden md:flex flex-col text-left"><span class="font-label-md text-label-md text-on-surface leading-tight">Ahmad Fauzi</span><span class="font-label-sm text-label-sm text-outline leading-tight">Online</span></div></div></div></header><main class="w-full pt-16 bg-surface min-h-screen px-space-xl py-space-xl"><div class="flex flex-col w-full gap-y-space-xl">
+<!-- Header Intro & Guidance Banner -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md bg-surface-container-lowest p-space-lg rounded-xl shadow-sm">
+<div class="flex flex-col gap-1 max-w-2xl">
+<div class="inline-flex items-center gap-2">
+<span class="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm uppercase tracking-wider">Layanan Akademik Mahasiswa</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-label-sm text-label-sm text-outline">Prosedur Standar Presensi</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Formulir Pengajuan Izin &amp; Sakit</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        Pengajuan dispensasi ketidakhadiran perkuliahan resmi yang akan diverifikasi secara berjenjang oleh Dosen Pengampu Mata Kuliah dan Dosen Wali Akademik.
+      </p>
+</div>
+<div class="flex items-center gap-space-sm bg-surface-container-low px-space-md py-space-sm rounded-xl shrink-0">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-2xl">verified_user</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Maks. Pengajuan</span>
+<span class="font-body-sm text-body-sm text-outline">H+3 dari tanggal absen</span>
+</div>
+</div>
+</div>
+<!-- Main Grid: Form (2 Cols) + Summary Side Widget (1 Col) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- Form Card Left/Main (lg:col-span-8) -->
+<div class="lg:col-span-8 bg-surface-container-lowest p-space-xl rounded-xl shadow-sm flex flex-col gap-space-lg">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-2">
+<span class="w-2 h-6 rounded-full bg-primary"></span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Detail Permohonan</h2>
+</div>
+<span class="font-label-sm text-label-sm text-outline">* Wajib diisi dengan valid</span>
+</div>
+<form class="flex flex-col gap-space-lg" id="attendance-form" onsubmit="event.preventDefault(); handleSubmit();">
+<!-- Radio Button Kategori: Izin vs Sakit -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-lg text-label-lg text-on-surface">Kategori Ketidakhadiran</label>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm mt-1">
+<!-- Izin Radio Option -->
+<label class="relative flex items-start gap-space-sm p-space-md rounded-xl cursor-pointer transition-all bg-surface-container-low hover:bg-surface-container" id="card-cat-izin">
+<input checked="" class="mt-1 w-4 h-4 text-primary accent-primary" name="category" onchange="toggleCategory('izin')" type="radio" value="izin"/>
+<div class="flex flex-col select-none">
+<span class="font-label-lg text-label-lg text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg text-primary">event_busy</span>
+                  Izin Kepentingan
+                </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Keperluan Akademik, Delegasi Kampus, atau Urusan Keluarga</span>
+</div>
+</label>
+<!-- Sakit Radio Option -->
+<label class="relative flex items-start gap-space-sm p-space-md rounded-xl cursor-pointer transition-all bg-surface-container-low hover:bg-surface-container" id="card-cat-sakit">
+<input class="mt-1 w-4 h-4 text-primary accent-primary" name="category" onchange="toggleCategory('sakit')" type="radio" value="sakit"/>
+<div class="flex flex-col select-none">
+<span class="font-label-lg text-label-lg text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg text-tertiary">medical_services</span>
+                  Kondisi Sakit
+                </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Wajib melampirkan Surat Keterangan Dokter / Rawat Inap</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Pilihan Mata Kuliah Terkait -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-lg text-label-lg text-on-surface flex items-center justify-between" for="course-select">
+<span>Mata Kuliah &amp; Sesi Perkuliahan</span>
+<span class="font-label-sm text-label-sm text-outline">Semester Genap 2024/2025</span>
+</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-xl">menu_book</span>
+<select class="w-full h-11 pl-11 pr-10 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md appearance-none focus:outline-none focus:bg-surface-container-lowest focus:shadow-md transition-all" id="course-select" required="">
+<option disabled="" selected="" value="">Pilih mata kuliah yang berhalangan hadir...</option>
+<option value="cs301">Kecerdasan Buatan - Pertemuan 8 (14 Okt 2024) [Senin, 08:00 - 10:30]</option>
+<option value="cs302">Pemrograman Web Lanjut - Pertemuan 9 (15 Okt 2024) [Selasa, 10:45 - 13:15]</option>
+<option value="cs303">Rekayasa Perangkat Lunak - Pertemuan 8 (16 Okt 2024) [Rabu, 13:30 - 16:00]</option>
+<option value="cs304">Jaringan Komputer &amp; Siber - Pertemuan 7 (17 Okt 2024) [Kamis, 08:00 - 10:30]</option>
+<option value="cs305">Etika Profesi Teknologi Informasi - Pertemuan 8 (18 Okt 2024) [Jumat, 09:00 - 11:30]</option>
+</select>
+<span class="material-symbols-outlined absolute right-3.5 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-xl">expand_more</span>
+</div>
+</div>
+<!-- Rentang Tanggal Izin -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-lg text-label-lg text-on-surface" for="date-start">Tanggal Mulai</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-xl">calendar_today</span>
+<input class="w-full h-11 pl-11 pr-4 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:bg-surface-container-lowest focus:shadow-md transition-all" id="date-start" required="" type="date" value="2024-10-24"/>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-lg text-label-lg text-on-surface" for="date-end">Tanggal Selesai</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-xl">event_repeat</span>
+<input class="w-full h-11 pl-11 pr-4 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:bg-surface-container-lowest focus:shadow-md transition-all" id="date-end" required="" type="date" value="2024-10-24"/>
+</div>
+</div>
+</div>
+<!-- Textarea Alasan Pengajuan -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg text-on-surface" for="reason-text">Keterangan &amp; Alasan Pengajuan</label>
+<span class="font-label-sm text-label-sm text-outline" id="char-counter">0 / 250 karakter</span>
+</div>
+<textarea class="w-full p-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest focus:shadow-md transition-all resize-none" id="reason-text" maxlength="250" oninput="updateCharCount(this)" placeholder="Jelaskan alasan ketidakhadiran secara santun, rinci, dan objektif untuk pertimbangan dosen pengampu..." required="" rows="4"></textarea>
+</div>
+<!-- Drag & Drop Upload Bukti -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-lg text-label-lg text-on-surface flex items-center justify-between">
+<span>Lampiran Dokumen Bukti Pendukung</span>
+<span class="font-label-sm text-label-sm text-outline">Format: PDF, JPG, PNG (Maks 5MB)</span>
+</label>
+<div class="relative group cursor-pointer flex flex-col items-center justify-center p-space-lg rounded-xl bg-surface-container-low hover:bg-surface-container transition-all" id="drop-zone" onclick="document.getElementById('file-input').click()" ondragleave="this.classList.remove('bg-surface-container');" ondragover="event.preventDefault(); this.classList.add('bg-surface-container');" ondrop="handleDrop(event)">
+<input accept=".pdf,.jpg,.jpeg,.png" class="hidden" id="file-input" onchange="handleFileSelect(this)" type="file"/>
+<div class="flex flex-col items-center text-center gap-2" id="upload-prompt">
+<div class="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-2xl">cloud_upload</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">Tarik &amp; Lepas file ke sini, atau <span class="text-primary font-semibold underline">Pilih File</span></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Surat Dokter / Undangan Delegasi / Surat Izin Orang Tua</span>
+</div>
+</div>
+<!-- Upload File Preview State (Hidden by default) -->
+<div class="hidden w-full flex items-center justify-between p-space-md bg-surface-container-lowest rounded-xl shadow-sm" id="file-preview-card">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-10 rounded-lg bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-xl" id="file-icon">description</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate" id="file-name">surat_keterangan_dokter.pdf</span>
+<span class="font-body-sm text-body-sm text-outline" id="file-size">1.4 MB - Siap diunggah</span>
+</div>
+</div>
+<button class="p-2 rounded-lg text-outline hover:text-error hover:bg-error-container/20 transition-colors" onclick="event.stopPropagation(); removeFile();" type="button">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Submission Actions & Confirmation Alert -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-space-md pt-space-sm">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-secondary text-lg">info</span>
+<span>Data yang dikirim akan diverifikasi dalam 1x24 jam kerja.</span>
+</div>
+<div class="flex items-center gap-space-sm w-full sm:w-auto">
+<button class="w-full sm:w-auto px-space-lg py-2.5 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors font-label-lg text-label-lg" onclick="resetForm()" type="reset">
+              Batal
+            </button>
+<button class="w-full sm:w-auto px-space-xl py-2.5 rounded-lg bg-primary-container text-on-primary hover:bg-primary transition-all font-label-lg text-label-lg shadow-sm flex items-center justify-center gap-2" id="btn-submit" type="submit">
+<span class="material-symbols-outlined text-xl">send</span>
+<span>Kirim Pengajuan Izin</span>
+</button>
+</div>
+</div>
+</form>
+</div>
+<!-- Right Column: Student Status Summary & Academic Guidelines Card -->
+<div class="lg:col-span-4 flex flex-col gap-space-lg">
+<!-- Attendance Allowance Quota Card -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md uppercase tracking-wider text-outline">Batas Toleransi Presensi</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-semibold">Aktif</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg text-on-surface">88%</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Rata-rata Kehadiran</span>
+</div>
+<!-- Visual Ring/Bar Indicator -->
+<div class="flex flex-col gap-1.5">
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden flex">
+<div class="bg-primary h-full" style="width: 88%"></div>
+</div>
+<div class="flex justify-between font-label-sm text-label-sm text-outline">
+<span>Minimal Kelulusan: 75%</span>
+<span>Sisa Izin Aman: 2 Sesi</span>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2 pt-space-xs text-center">
+<div class="p-2 rounded-xl bg-surface-container-low flex flex-col">
+<span class="font-label-sm text-label-sm text-outline">Hadir</span>
+<span class="font-headline-sm text-headline-sm text-secondary font-bold">28</span>
+</div>
+<div class="p-2 rounded-xl bg-surface-container-low flex flex-col">
+<span class="font-label-sm text-label-sm text-outline">Izin/Sakit</span>
+<span class="font-headline-sm text-headline-sm text-tertiary font-bold">3</span>
+</div>
+<div class="p-2 rounded-xl bg-surface-container-low flex flex-col">
+<span class="font-label-sm text-label-sm text-outline">Alfa</span>
+<span class="font-headline-sm text-headline-sm text-error font-bold">0</span>
+</div>
+</div>
+</div>
+<!-- Panduan Mahasiswa Info Card -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-xl">policy</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface">Panduan Berkas</span>
+</div>
+<ul class="flex flex-col gap-space-sm font-body-sm text-body-sm text-on-surface-variant">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-base text-secondary shrink-0 mt-0.5">check_circle</span>
+<span><strong>Surat Dokter:</strong> Memuat nama instansi/klinik, cap stempel resmi dokter, dan diagnosa singkat.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-base text-secondary shrink-0 mt-0.5">check_circle</span>
+<span><strong>Dispensasi Lomba:</strong> Ditandatangani oleh Wakil Dekan III Bidang Kemahasiswaan.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-base text-secondary shrink-0 mt-0.5">check_circle</span>
+<span><strong>Izin Keluarga:</strong> Disertai surat pernyataan bertanda tangan orang tua/wali mahasiswa.</span>
+</li>
+</ul>
+</div>
+<!-- Quick Contact Help Card -->
+<div class="p-space-lg rounded-xl bg-surface-container-low flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Perlu Bantuan Urgent?</span>
+<span class="font-body-sm text-body-sm text-outline">Hubungi Bagian Akademik Prodi</span>
+</div>
+<a class="p-2 rounded-lg bg-surface-container-highest text-primary hover:bg-primary hover:text-on-primary transition-colors" href="mailto:akademik.ti@universitas.ac.id">
+<span class="material-symbols-outlined text-xl">support_agent</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Bottom Section: History / Riwayat Pengajuan Sebelumnya -->
+<div class="flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-2">
+<span class="w-2 h-6 rounded-full bg-secondary"></span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Riwayat Pengajuan Sebelumnya</h2>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="font-label-sm text-label-sm text-outline">Menampilkan 3 permohonan terakhir</span>
+<button class="p-1.5 rounded-lg bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-colors" title="Muat Ulang Riwayat" type="button">
+<span class="material-symbols-outlined text-lg">refresh</span>
+</button>
+</div>
+</div>
+<!-- History Cards / Table Container -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<!-- Desktop Table Header -->
+<div class="hidden md:grid grid-cols-12 px-space-lg py-space-sm bg-surface-container-low font-label-sm text-label-sm text-outline uppercase tracking-wider">
+<div class="col-span-4">Kategori &amp; Alasan</div>
+<div class="col-span-3">Mata Kuliah &amp; Tanggal</div>
+<div class="col-span-3">Lampiran Dokumen</div>
+<div class="col-span-2 text-right">Status Verifikasi</div>
+</div>
+<!-- Item 1: Sakit (Disetujui) -->
+<div class="flex flex-col md:grid md:grid-cols-12 p-space-lg gap-space-sm md:gap-0 items-start md:items-center hover:bg-surface-container-low/50 transition-colors">
+<div class="md:col-span-4 flex items-center gap-space-sm min-w-0 w-full">
+<div class="w-10 h-10 rounded-xl bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-xl">sick</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">Sakit (Demam Berdarah)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">Rawat inap di RS Pantai Kasih selama 3 hari</span>
+</div>
+</div>
+<div class="md:col-span-3 flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Basis Data (Kelas B)</span>
+<span class="font-body-sm text-body-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+            02 Okt 2024
+          </span>
+</div>
+<div class="md:col-span-3 flex items-center gap-2">
+<a class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container text-primary font-label-md text-label-md hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-base">picture_as_pdf</span>
+<span class="truncate max-w-[150px]">surat_dokter_rs_pantai.pdf</span>
+</a>
+</div>
+<div class="md:col-span-2 flex justify-start md:justify-end w-full">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-md text-label-md">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>Disetujui Dosen Wali</span>
+</div>
+</div>
+</div>
+<!-- Subtle separator -->
+<div class="h-px bg-surface-container-low w-full"></div>
+<!-- Item 2: Izin Delegasi (Disetujui) -->
+<div class="flex flex-col md:grid md:grid-cols-12 p-space-lg gap-space-sm md:gap-0 items-start md:items-center hover:bg-surface-container-low/50 transition-colors">
+<div class="md:col-span-4 flex items-center gap-space-sm min-w-0 w-full">
+<div class="w-10 h-10 rounded-xl bg-primary-fixed text-on-primary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-xl">military_tech</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">Izin (Delegasi Lomba Gemastik)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">Mewakili universitas kategori Data Mining babak final</span>
+</div>
+</div>
+<div class="md:col-span-3 flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Kecerdasan Buatan (Kelas A)</span>
+<span class="font-body-sm text-body-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+            25 Sep 2024
+          </span>
+</div>
+<div class="md:col-span-3 flex items-center gap-2">
+<a class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container text-primary font-label-md text-label-md hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-base">picture_as_pdf</span>
+<span class="truncate max-w-[150px]">surat_tugas_dekanat.pdf</span>
+</a>
+</div>
+<div class="md:col-span-2 flex justify-start md:justify-end w-full">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-md text-label-md">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>Disetujui Dosen</span>
+</div>
+</div>
+</div>
+<!-- Subtle separator -->
+<div class="h-px bg-surface-container-low w-full"></div>
+<!-- Item 3: Izin Urusan Keluarga (Menunggu Konfirmasi) -->
+<div class="flex flex-col md:grid md:grid-cols-12 p-space-lg gap-space-sm md:gap-0 items-start md:items-center hover:bg-surface-container-low/50 transition-colors">
+<div class="md:col-span-4 flex items-center gap-space-sm min-w-0 w-full">
+<div class="w-10 h-10 rounded-xl bg-tertiary-fixed-dim/40 text-on-tertiary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-xl">diversity_1</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">Izin (Urusan Keluarga Mendesak)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">Mengurus kepulangan keluarga di luar kota</span>
+</div>
+</div>
+<div class="md:col-span-3 flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Rekayasa Perangkat Lunak (Kelas A)</span>
+<span class="font-body-sm text-body-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+            14 Okt 2024
+          </span>
+</div>
+<div class="md:col-span-3 flex items-center gap-2">
+<a class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container text-primary font-label-md text-label-md hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-base">description</span>
+<span class="truncate max-w-[150px]">surat_pernyataan_wali.pdf</span>
+</a>
+</div>
+<div class="md:col-span-2 flex justify-start md:justify-end w-full">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-md text-label-md">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span>Menunggu Konfirmasi</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Notification Toast Modal Trigger Simulation -->
+<div class="fixed bottom-6 right-6 z-50 transform translate-y-32 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-3 px-4 py-3 rounded-xl bg-on-surface text-surface shadow-xl" id="toast-success">
+<span class="material-symbols-outlined text-secondary text-2xl">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md">Permohonan Berhasil Dikirim!</span>
+<span class="font-body-sm text-body-sm text-outline-variant">Notifikasi telah diteruskan ke dosen pengampu.</span>
+</div>
+</div>
+</div>
+<script>
+  function toggleCategory(type) {
+    const cardIzin = document.getElementById('card-cat-izin');
+    const cardSakit = document.getElementById('card-cat-sakit');
+    if (type === 'izin') {
+      cardIzin.classList.add('bg-primary/5', 'shadow-sm');
+      cardSakit.classList.remove('bg-primary/5', 'shadow-sm');
+    } else {
+      cardSakit.classList.add('bg-primary/5', 'shadow-sm');
+      cardIzin.classList.remove('bg-primary/5', 'shadow-sm');
+    }
+  }
+
+  function updateCharCount(el) {
+    const counter = document.getElementById('char-counter');
+    counter.textContent = el.value.length + ' / 250 karakter';
+  }
+
+  function handleFileSelect(input) {
+    if (input.files && input.files[0]) {
+      renderFileInfo(input.files[0]);
+    }
+  }
+
+  function handleDrop(e) {
+    e.preventDefault();
+    const zone = document.getElementById('drop-zone');
+    zone.classList.remove('bg-surface-container');
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      renderFileInfo(e.dataTransfer.files[0]);
+    }
+  }
+
+  function renderFileInfo(file) {
+    const prompt = document.getElementById('upload-prompt');
+    const preview = document.getElementById('file-preview-card');
+    const nameEl = document.getElementById('file-name');
+    const sizeEl = document.getElementById('file-size');
+    const iconEl = document.getElementById('file-icon');
+
+    nameEl.textContent = file.name;
+    const mb = (file.size / (1024 * 1024)).toFixed(2);
+    sizeEl.textContent = mb + ' MB - Siap diverifikasi';
+
+    if (file.name.endsWith('.pdf')) {
+      iconEl.textContent = 'picture_as_pdf';
+    } else {
+      iconEl.textContent = 'image';
+    }
+
+    prompt.classList.add('hidden');
+    preview.classList.remove('hidden');
+  }
+
+  function removeFile() {
+    const input = document.getElementById('file-input');
+    input.value = '';
+    document.getElementById('upload-prompt').classList.remove('hidden');
+    document.getElementById('file-preview-card').classList.add('hidden');
+  }
+
+  function resetForm() {
+    removeFile();
+    document.getElementById('attendance-form').reset();
+    document.getElementById('char-counter').textContent = '0 / 250 karakter';
+    toggleCategory('izin');
+  }
+
+  function handleSubmit() {
+    const btn = document.getElementById('btn-submit');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span class="material-symbols-outlined text-xl animate-spin">refresh</span><span>Mengirim...</span>';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      showToast();
+      resetForm();
+    }, 1000);
+  }
+
+  function showToast() {
+    const toast = document.getElementById('toast-success');
+    toast.classList.remove('translate-y-32', 'opacity-0');
+    toast.classList.add('translate-y-0', 'opacity-100');
+
+    setTimeout(() => {
+      toast.classList.add('translate-y-32', 'opacity-0');
+      toast.classList.remove('translate-y-0', 'opacity-100');
+    }, 4000);
+  }
+
+  // Initialize Category Selection Style
+  toggleCategory('izin');
+</script></main></div><script>
+(function(){
+  function post(msg){ try { window.parent.postMessage(msg, '*'); } catch(e){} }
+  function txt(el){ return (el && el.innerText ? el.innerText : '').toLowerCase(); }
+  function role(){
+    var p = location.pathname;
+    if (p.indexOf('screen1_login')!==-1) return 'login';
+    if (p.indexOf('screen2_dashboard_mhs')!==-1) return 'student-dashboard';
+    if (p.indexOf('screen3_absen')!==-1) return 'attendance-join';
+    if (p.indexOf('screen4_dashboard_dosen')!==-1) return 'lecturer-dashboard';
+    if (p.indexOf('screen5_rekap')!==-1) return 'attendance-recap';
+    if (p.indexOf('screen6_izin_sakit')!==-1) return 'leave-request';
+    return 'page';
+  }
+  var R = role();
+
+  // Map keyword -> route
+  function routeFor(t, el){
+    if (t.indexOf('logout')!==-1 || t.indexOf('keluar')!==-1) return 'nav:/';
+    if (t.indexOf('scanner')!==-1 || t.indexOf('scan qr')!==-1 || t.indexOf('absen sekarang')!==-1) return 'nav:/attendance-join';
+    if (t.indexOf('pengajuan izin')!==-1 || t.indexOf('izin/sakit')!==-1 || t.indexOf('ajukan')!==-1) return 'nav:/leave-request';
+    if (t.indexOf('rekap')!==-1) return 'nav:/attendance-recap';
+    if (t.indexOf('dashboard mahasiswa')!==-1 || t.indexOf('beranda')!==-1) return 'nav:/student-dashboard';
+    if (t.indexOf('bukÃÂ° sesi')!==-1 || t.indexOf('sesi absen baru')!==-1) return 'nav:/lecturer-dashboard';
+    return null;
+  }
+
+  document.addEventListener('click', function(ev){
+    var el = ev.target.closest('button, a, [role=button], .cursor-pointer');
+    if(!el) return;
+    var t = txt(el);
+
+    if (R === 'login'){
+      if (t.indexOf('sso')!==-1){ post('nav:/student-dashboard'); return; }
+      if (t.indexOf('masuk')!==-1){
+        var idEl = document.getElementById('identifier');
+        var val = idEl ? (idEl.value||'') : '';
+        if (/dosen|lecturer|hendra/i.test(val)) post('nav:/lecturer-dashboard');
+        else post('nav:/student-dashboard');
+        return;
+      }
+    }
+
+    var r = routeFor(t, el);
+    if (r){ post(r); }
+  }, true);
+})();
+
+</script>
+</body></html>
