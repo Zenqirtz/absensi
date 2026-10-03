@@ -7,10 +7,7 @@ class AttendanceRecapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StitchWebView(
-        htmlPath: 'stitch/screen5_rekap.html',
-        onNavigate: (route) => Navigator.of(context).pushReplacementNamed(route),
-      ),
+      body: StitchWebView(htmlPath: 'stitch/screen5_rekap.html'),
     );
   }
 }
