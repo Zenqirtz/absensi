@@ -55,10 +55,28 @@
   </div>
   <script src="flutter_bootstrap.js" async></script>
   <script>
-    window.addEventListener('flutter-first-frame', function () {
+    function hideLoading() {
       var el = document.getElementById('loading');
-      if (el) { el.classList.add('hide'); setTimeout(function(){ el.remove(); }, 400); }
+      if (el && !el.classList.contains('hide')) {
+        el.classList.add('hide');
+        setTimeout(function(){ if (el.parentNode) el.parentNode.removeChild(el); }, 400);
+      }
+    }
+
+    window.addEventListener('flutter-first-frame', hideLoading);
+    window.addEventListener('load', function() {
+      setTimeout(hideLoading, 1500);
     });
+
+    var obs = new MutationObserver(function() {
+      if (document.querySelector('flutter-view, flt-glass-pane, flt-scene-host, [flt-renderer]')) {
+        hideLoading();
+        obs.disconnect();
+      }
+    });
+    obs.observe(document.body, { childList: true, subtree: true });
+
+    setTimeout(hideLoading, 3000);
   </script>
 </body>
 </html>
