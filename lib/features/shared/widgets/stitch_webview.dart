@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_web_libraries_in_flutter
-import 'dart:ui_web' as ui_web;
 import 'package:flutter/material.dart';
+import 'dart:ui_web' as ui_web;
 import 'dart:html' as html;
 
 class StitchWebView extends StatefulWidget {
@@ -17,6 +17,8 @@ class StitchWebView extends StatefulWidget {
   State<StitchWebView> createState() => _StitchWebViewState();
 }
 
+final _registeredViews = <String>{};
+
 class _StitchWebViewState extends State<StitchWebView> {
   late final String _viewId;
 
@@ -25,22 +27,16 @@ class _StitchWebViewState extends State<StitchWebView> {
     super.initState();
     _viewId = 'stitch-iframe-${widget.htmlPath.hashCode}';
 
-    ui_web.platformViewRegistry.registerViewFactory(_viewId, (int id) {
-      final iframe = html.IFrameElement()
-        ..src = widget.htmlPath
-        ..style.border = 'none'
-        ..style.width = '100%'
-        ..style.height = '100%'
-        ..allowFullscreen = true;
-      return iframe;
-    });
-
-    if (widget.onNavigate != null) {
-      html.window.onMessage.listen((event) {
-        final data = event.data?.toString() ?? '';
-        if (data.startsWith('nav:')) {
-          widget.onNavigate!(data.substring(4));
-        }
+    if (!_registeredViews.contains(_viewId)) {
+      _registeredViews.add(_viewId);
+      ui_web.platformViewRegistry.registerViewFactory(_viewId, (int id) {
+        final iframe = html.IFrameElement()
+          ..src = widget.htmlPath
+          ..style.border = 'none'
+          ..style.width = '100%'
+          ..style.height = '100%'
+          ..allowFullscreen = true;
+        return iframe;
       });
     }
   }
