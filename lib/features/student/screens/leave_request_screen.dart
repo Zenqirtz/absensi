@@ -7,10 +7,7 @@ class LeaveRequestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StitchWebView(
-        htmlPath: 'stitch/screen6_izin_sakit.html',
-        onNavigate: (route) => Navigator.of(context).pushReplacementNamed(route),
-      ),
+      body: StitchWebView(htmlPath: 'stitch/screen6_izin_sakit.html'),
     );
   }
 }
