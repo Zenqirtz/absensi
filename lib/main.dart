@@ -6,9 +6,30 @@ import 'features/student/screens/leave_request_screen.dart';
 import 'features/lecturer/screens/lecturer_dashboard_screen.dart';
 import 'features/lecturer/screens/attendance_recap_screen.dart';
 import 'screens/home_screen.dart';
+import 'dart:html' as html;
+import 'dart:ui_web' as ui_web;
+
+final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
+
+void handleRoute(String route) {
+  var target = route.startsWith('/') ? route : '/$route';
+  print('[Flutter] handleRoute navigating to: $target');
+  navKey.currentState?.pushReplacementNamed(target);
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  ui_web.platformViewRegistry;
+
+  html.window.onMessage.listen((event) {
+    final data = event.data?.toString() ?? '';
+    print('[Flutter] onMessage received: $data');
+    if (data.startsWith('nav:')) {
+      handleRoute(data.substring(4));
+    }
+  });
+
   runApp(const AttendanceApp());
 }
 
@@ -20,6 +41,7 @@ class AttendanceApp extends StatelessWidget {
     return MaterialApp(
       title: 'Web Absensi Kelas',
       debugShowCheckedModeBanner: false,
+      navigatorKey: navKey,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
