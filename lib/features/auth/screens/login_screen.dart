@@ -7,10 +7,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StitchWebView(
-        htmlPath: 'stitch/screen1_login.html',
-        onNavigate: (route) => Navigator.of(context).pushReplacementNamed(route),
-      ),
+      body: StitchWebView(htmlPath: 'stitch/screen1_login.html'),
     );
   }
 }
