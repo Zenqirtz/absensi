@@ -7,10 +7,7 @@ class StudentDashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StitchWebView(
-        htmlPath: 'stitch/screen2_dashboard_mhs.html',
-        onNavigate: (route) => Navigator.of(context).pushReplacementNamed(route),
-      ),
+      body: StitchWebView(htmlPath: 'stitch/screen2_dashboard_mhs.html'),
     );
   }
 }
