@@ -143,12 +143,34 @@
     const toggleBtn = document.getElementById('togglePasswordBtn');
     const pwdInput = document.getElementById('password');
     const eyeIcon = document.getElementById('eyeIcon');
+    const idInput = document.getElementById('identifier');
+    const form = document.querySelector('form');
+    const ssoBtn = document.querySelector('button[type="button"].bg-surface-container-low');
 
     if (toggleBtn && pwdInput && eyeIcon) {
       toggleBtn.addEventListener('click', function() {
         const isPassword = pwdInput.getAttribute('type') === 'password';
         pwdInput.setAttribute('type', isPassword ? 'text' : 'password');
         eyeIcon.textContent = isPassword ? 'visibility' : 'visibility_off';
+      });
+    }
+
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const val = (idInput ? idInput.value : '').toLowerCase();
+        if (val.includes('dosen') || val.includes('hendra') || val.includes('nip')) {
+          window.parent.postMessage('navigate:dashboard-dosen', '*');
+        } else {
+          window.parent.postMessage('navigate:dashboard-mahasiswa', '*');
+        }
+      });
+    }
+
+    if (ssoBtn) {
+      ssoBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.parent.postMessage('navigate:dashboard-mahasiswa', '*');
       });
     }
   })();
