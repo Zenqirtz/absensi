@@ -354,6 +354,18 @@
   }
 
   function downloadReceipt() {
-    alert('Mengunduh Bukti Hadir Resmi (PDF) - Mahasiswa: Ahmad Fauzi (NIM 2108107010)');
-  }
+     alert('Mengunduh Bukti Hadir Resmi (PDF) - Mahasiswa: Ahmad Fauzi (NIM 2108107010)');
+   }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('[data-path]').forEach(el => {
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+        const path = this.getAttribute('data-path');
+        if (path) {
+          window.parent.postMessage('navigate:' + path, '*');
+        }
+      });
+    });
+  });
 </script></main></div></body></html>
