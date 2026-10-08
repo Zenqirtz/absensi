@@ -545,4 +545,24 @@
       });
     });
   }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('[data-path]').forEach(el => {
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+        const path = this.getAttribute('data-path');
+        if (path) window.parent.postMessage('navigate:' + path, '*');
+      });
+    });
+
+    const exportPdf = document.querySelector('button:has(span.material-symbols-outlined:contains("picture_as_pdf"))') || document.querySelectorAll('button')[0];
+    const exportExcel = document.querySelectorAll('button')[1];
+
+    if (exportPdf) {
+      exportPdf.addEventListener('click', () => alert('Mengunduh Laporan Rekap Kehadiran (PDF)...'));
+    }
+    if (exportExcel) {
+      exportExcel.addEventListener('click', () => alert('Mengunduh Matriks Rekap Kehadiran (Excel/XLSX)...'));
+    }
+  });
 </script></main></div></body></html>
