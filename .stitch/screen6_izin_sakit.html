@@ -459,4 +459,14 @@
 
   // Initialize Category Selection Style
   toggleCategory('izin');
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('[data-path]').forEach(el => {
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+        const path = this.getAttribute('data-path');
+        if (path) window.parent.postMessage('navigate:' + path, '*');
+      });
+    });
+  });
 </script></main></div></body></html>
