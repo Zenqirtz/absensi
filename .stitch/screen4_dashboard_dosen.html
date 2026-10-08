@@ -549,4 +549,32 @@
       }
     });
   })();
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('[data-path]').forEach(el => {
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+        const path = this.getAttribute('data-path');
+        if (path) window.parent.postMessage('navigate:' + path, '*');
+      });
+    });
+
+    const btns = document.querySelectorAll('button');
+    btns.forEach(btn => {
+      const label = btn.textContent.trim();
+      if (label === '+ Buka Sesi Absen Baru') {
+        btn.setAttribute('data-path', 'dosen-buat-sesi');
+        btn.addEventListener('click', () => window.parent.postMessage('navigate:dosen-buat-sesi', '*'));
+      }
+      if (label === 'Riwayat Sesi') {
+        btn.setAttribute('data-path', 'dosen-riwayat-sesi');
+        btn.addEventListener('click', () => window.parent.postMessage('navigate:dosen-riwayat-sesi', '*'));
+      }
+      if (label === 'Tandai Manual' || label === 'Kunci Sesi Sekarang' || label === 'Tutup Absensi') {
+        btn.addEventListener('click', () => {
+          alert('Aksi "' + label + '" belum tersedia di demo.');
+        });
+      }
+    });
+  });
 </script></main></div></body></html>
