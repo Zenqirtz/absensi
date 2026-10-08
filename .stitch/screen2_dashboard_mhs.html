@@ -463,16 +463,18 @@
 </div>
 </div>
 </section>
-<!-- Interactive Client-side Script for Quick Feedback -->
-<script>
+  <!-- Interactive Client-side Script for Quick Feedback -->
+  <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Optional micro-interaction feedback
-      const quickActionBtn = document.querySelector('[data-path="absen-kelas"]');
-      if (quickActionBtn) {
-        quickActionBtn.addEventListener('click', function(e) {
-          // Normal link handling preserved
+      document.querySelectorAll('[data-path]').forEach(el => {
+        el.addEventListener('click', function(e) {
+          e.preventDefault();
+          const path = this.getAttribute('data-path');
+          if (path) {
+            window.parent.postMessage('navigate:' + path, '*');
+          }
         });
-      }
+      });
     });
   </script>
 </div></main></div></body></html>
