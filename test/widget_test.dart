@@ -6,8 +6,8 @@ import 'package:flutter_application_1/main.dart';
 
 void main() {
   testWidgets('App loads successfully', (WidgetTester tester) async {
-    await tester.pumpWidget(const AttendanceApp());
+    await tester.pumpWidget(const AbsenEaseApp());
 
-    expect(find.text('Presensi Kantor'), findsOneWidget);
+    expect(find.text('AbsenEase'), findsOneWidget);
   });
 }
