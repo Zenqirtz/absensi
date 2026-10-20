@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:geolocator/geolocator.dart';
+import '../core/config/supabase_config.dart';
 import '../core/theme/absentease_theme.dart';
 import '../core/widgets/absentease_brand.dart';
+import '../features/attendance/services/attendance_service.dart';
 import '../features/attendance/widgets/sukses_absen_dialog.dart';
 
 /// Beranda: komposisi navy di atas + panel putih konten seperti referensi.
@@ -15,17 +19,95 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  final _attendanceService = AttendanceService();
   bool _checkedIn = false;
+  bool _isLoading = false;
 
-  void _handleCheckIn() {
-    setState(() => _checkedIn = true);
+  @override
+  void initState() {
+    super.initState();
+    _checkTodayStatus();
+  }
+
+  Future<void> _checkTodayStatus() async {
+    if (!SupabaseConfig.isConfigured) return;
+    try {
+      final hasChecked = await _attendanceService.hasCheckedInToday();
+      if (mounted) setState(() => _checkedIn = hasChecked);
+    } catch (_) {}
+  }
+
+  Future<Position?> _getCurrentLocation() async {
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) return null;
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) return null;
+      }
+      if (permission == LocationPermission.deniedForever) return null;
+
+      return await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.best,
+          distanceFilter: 0,
+        ),
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> _handleCheckIn() async {
+    final now = DateTime.now();
+    final timeStr = DateFormat('HH:mm').format(now);
+    final dateStr = DateFormat('EEEE, dd MMMM yyyy', 'id_ID').format(now);
+
+    if (SupabaseConfig.isConfigured) {
+      setState(() => _isLoading = true);
+      try {
+        final pos = await _getCurrentLocation();
+        final lat = pos?.latitude ?? -6.2088;
+        final lng = pos?.longitude ?? 106.8456;
+
+        if (!_checkedIn) {
+          await _attendanceService.checkIn(
+            latitude: lat,
+            longitude: lng,
+            address: pos != null ? 'Koordinat ($lat, $lng)' : 'Kantor Pusat',
+          );
+        } else {
+          await _attendanceService.checkOut(
+            latitude: lat,
+            longitude: lng,
+            address: pos != null ? 'Koordinat ($lat, $lng)' : 'Kantor Pusat',
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Gagal mencatat presensi: $e')),
+          );
+        }
+      } finally {
+        if (mounted) setState(() => _isLoading = false);
+      }
+    }
+
+    if (!mounted) return;
+    setState(() => _checkedIn = !_checkedIn);
+
     showDialog<void>(
       context: context,
       builder: (context) => SuksesAbsenDialog(
-        nama: 'John Doe',
-        tanggal: 'Jum\'at 03 Maret 2023',
-        waktu: '08:48 WIB',
-        status: 'Absen Masuk',
+        nama: SupabaseConfig.isConfigured
+            ? (SupabaseConfig.client.auth.currentUser?.email ?? 'John Doe')
+            : 'John Doe',
+        tanggal: dateStr.isNotEmpty ? dateStr : 'Jum\'at 03 Maret 2023',
+        waktu: '$timeStr WIB',
+        status: _checkedIn ? 'Absen Masuk' : 'Absen Pulang',
         onTutup: () => Navigator.pop(context),
       ),
     );
@@ -134,8 +216,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       const SizedBox(width: 5),
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: _handleCheckIn,
-                          child: Text(_checkedIn ? 'Absen Pulang' : 'Absen Masuk'),
+                          onPressed: _isLoading ? null : _handleCheckIn,
+                          child: _isLoading
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : Text(_checkedIn ? 'Absen Pulang' : 'Absen Masuk'),
                         ),
                       ),
                     ],
