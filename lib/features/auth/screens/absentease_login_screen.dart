@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../../core/config/supabase_config.dart';
 import '../../../core/theme/absentease_theme.dart';
 import '../../../core/widgets/absentease_brand.dart';
+import '../services/auth_service.dart';
 
 /// Layar Login — referensi layar tengah.
 /// Struktur visual:
@@ -24,7 +27,9 @@ class AbsenEaseLoginScreen extends StatefulWidget {
 class _AbsenEaseLoginScreenState extends State<AbsenEaseLoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _authService = AuthService();
   bool _obscurePassword = true;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -33,8 +38,56 @@ class _AbsenEaseLoginScreenState extends State<AbsenEaseLoginScreen> {
     super.dispose();
   }
 
-  void _handleLogin() {
-    Navigator.pushReplacementNamed(context, '/dashboard');
+  Future<void> _handleLogin() async {
+    // Mode demo / fallback offline: jika Supabase belum disetup, izinkan langsung masuk.
+    if (!SupabaseConfig.isConfigured) {
+      Navigator.pushReplacementNamed(context, '/dashboard');
+      return;
+    }
+
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Silakan masukkan email dan password.'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+    try {
+      final response = await _authService.signIn(
+        email: email,
+        password: password,
+      );
+      if (response.user != null && mounted) {
+        Navigator.pushReplacementNamed(context, '/dashboard');
+      }
+    } on AuthException catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.message),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Terjadi kesalahan: $e'),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 
   void _handleInfo() {
@@ -254,8 +307,17 @@ class _AbsenEaseLoginScreenState extends State<AbsenEaseLoginScreen> {
               const SizedBox(height: 20),
               // Tombol Login pill
               ElevatedButton(
-                onPressed: _handleLogin,
-                child: const Text('Login'),
+                onPressed: _isLoading ? null : _handleLogin,
+                child: _isLoading
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text('Login'),
               ),
               const SizedBox(height: 12),
             ],
