@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'core/config/supabase_config.dart';
 import 'core/theme/absentease_theme.dart';
 import 'features/auth/screens/absentease_login_screen.dart';
 import 'screens/dashboard_screen.dart';
@@ -9,7 +10,9 @@ import 'screens/overtime_screen.dart';
 import 'screens/notifications_screen.dart';
 import 'screens/news_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SupabaseConfig.initialize();
   runApp(const AbsenEaseApp());
 }
 
