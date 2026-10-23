@@ -35,4 +35,7 @@ class SupabaseConfig {
   }
 
   static SupabaseClient get client => Supabase.instance.client;
+
+  static SupabaseClient? get clientOrNull =>
+      isConfigured ? Supabase.instance.client : null;
 }
