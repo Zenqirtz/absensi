@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import '../core/theme/absentease_theme.dart';
+import '../features/attendance/services/attendance_service.dart';
 
 /// Kalender Maret 2023 sesuai referensi:
 /// - Header putih tanpa bar navy (X tutup + judul "Kalender").
 /// - Navigasi bulan: chevron, nama bulan + tahun, chevron.
 /// - Header hari: M S S R K J S (Minggu–Sabtu).
 /// - Tanggal bulan lain abu-abu; tanggal aktif lingkaran penuh magenta.
+/// Titik di bawah tanggal menandai ada presensi (check-in) pada hari itu.
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
 
@@ -16,6 +18,9 @@ class CalendarScreen extends StatefulWidget {
 class _CalendarScreenState extends State<CalendarScreen> {
   DateTime _month = DateTime(2023, 3);
   DateTime? _selected = DateTime(2023, 3, 17);
+
+  final _attendanceService = AttendanceService();
+  Set<DateTime> _daysWithAttendance = {};
 
   static const List<String> _monthNames = [
     'Januari',
@@ -39,12 +44,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
   void _prevMonth() {
     setState(() {
       _month = DateTime(_month.year, _month.month - 1);
+      _loadAttendance();
     });
   }
 
   void _nextMonth() {
     setState(() {
       _month = DateTime(_month.year, _month.month + 1);
+      _loadAttendance();
     });
   }
 
@@ -52,6 +59,30 @@ class _CalendarScreenState extends State<CalendarScreen> {
     setState(() {
       _selected = DateTime(_month.year, _month.month, day);
     });
+  }
+
+  Future<void> _loadAttendance() async {
+    final days = await _attendanceService.getMonthlyAttendance(
+      year: _month.year,
+      month: _month.month,
+    );
+    if (!mounted) return;
+    setState(() {
+      _daysWithAttendance = days.map((d) {
+        final dt = DateTime.parse(d['check_time'].toString());
+        return DateTime(dt.year, dt.month, dt.day);
+      }).toSet();
+    });
+  }
+
+  bool _hasDot(DateTime day) {
+    return _daysWithAttendance.any((d) => d == day);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAttendance();
   }
 
   @override
@@ -159,6 +190,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       _selected!.year == _month.year &&
                       _selected!.month == _month.month &&
                       _selected!.day == day;
+                  final dayDate = DateTime(_month.year, _month.month, day);
+                  final hasAttendance = _hasDot(dayDate);
 
                   return GestureDetector(
                     onTap: () => _selectDate(day),
@@ -168,13 +201,28 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         color: isSelected ? AbsenEaseTheme.magenta : Colors.white,
                         shape: isSelected ? BoxShape.circle : BoxShape.rectangle,
                       ),
-                      child: Text(
-                        '$day',
-                        style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.black87,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
-                        ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '$day',
+                            style: TextStyle(
+                              color: isSelected ? Colors.white : Colors.black87,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                          if (hasAttendance)
+                            Container(
+                              margin: const EdgeInsets.only(top: 2),
+                              width: 4,
+                              height: 4,
+                              decoration: const BoxDecoration(
+                                color: AbsenEaseTheme.magenta,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                   );
