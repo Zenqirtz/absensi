@@ -7,10 +7,10 @@ import '../core/theme/absentease_theme.dart';
 import '../core/widgets/absentease_brand.dart';
 import '../features/attendance/services/attendance_service.dart';
 import '../features/attendance/widgets/sukses_absen_dialog.dart';
+import '../features/employee/services/employee_service.dart';
+import '../features/article/services/article_service.dart';
+import '../features/notification/services/notification_service.dart';
 
-/// Beranda: komposisi navy di atas + panel putih konten seperti referensi.
-/// Menu ditahan dalam satu baris; dua baris kartu diganti ikon label rapat
-/// agar urutan visual dan rasio layar mengikuti mockup.
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
@@ -20,20 +20,38 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final _attendanceService = AttendanceService();
+  final _employeeService = EmployeeService();
+  final _articleService = ArticleService();
+  final _notificationService = NotificationService();
+
   bool _checkedIn = false;
   bool _isLoading = false;
+
+  Map<String, dynamic>? _profile;
+  List<Map<String, dynamic>> _articles = [];
+  List<Map<String, dynamic>> _notifications = [];
 
   @override
   void initState() {
     super.initState();
-    _checkTodayStatus();
+    _loadAllData();
   }
 
-  Future<void> _checkTodayStatus() async {
+  Future<void> _loadAllData() async {
     if (!SupabaseConfig.isConfigured) return;
     try {
-      final hasChecked = await _attendanceService.hasCheckedInToday();
-      if (mounted) setState(() => _checkedIn = hasChecked);
+      final checked = await _attendanceService.hasCheckedInToday();
+      final profile = await _employeeService.getProfile();
+      final articles = await _articleService.getPublishedArticles(limit: 5);
+      final notifs = await _notificationService.getMyNotifications(limit: 3);
+      if (mounted) {
+        setState(() {
+          _checkedIn = checked;
+          _profile = profile;
+          _articles = articles;
+          _notifications = notifs;
+        });
+      }
     } catch (_) {}
   }
 
@@ -99,12 +117,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (!mounted) return;
     setState(() => _checkedIn = !_checkedIn);
 
+    final currentEmail = SupabaseConfig.isConfigured
+        ? (SupabaseConfig.client.auth.currentUser?.email ?? 'John Doe')
+        : 'John Doe';
+    final currentName = _profile?['full_name'] ?? currentEmail;
+
     showDialog<void>(
       context: context,
       builder: (context) => SuksesAbsenDialog(
-        nama: SupabaseConfig.isConfigured
-            ? (SupabaseConfig.client.auth.currentUser?.email ?? 'John Doe')
-            : 'John Doe',
+        nama: currentName,
         tanggal: dateStr.isNotEmpty ? dateStr : 'Jum\'at 03 Maret 2023',
         waktu: '$timeStr WIB',
         status: _checkedIn ? 'Absen Masuk' : 'Absen Pulang',
@@ -115,12 +136,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final timeStr = DateFormat('HH:mm').format(now);
+    final dateStr = DateFormat('EEEE dd MMMM yyyy', 'id_ID').format(now);
+
+    final displayName = _profile?['full_name'] ??
+        SupabaseConfig.clientOrNull?.auth.currentUser?.email?.split('@').first ??
+        'John Doe';
+    final displayRole = _profile?['role'] ?? 'Staff';
+    final initials = displayName.length >= 2
+        ? displayName.substring(0, 2).toUpperCase()
+        : 'JD';
+
     return Scaffold(
       backgroundColor: AbsenEaseTheme.navy,
       body: SafeArea(
         child: Column(
           children: [
-            // Area navy: wordmark, notifikasi, profil, waktu, tombol absen.
             Container(
               color: AbsenEaseTheme.navy,
               padding: const EdgeInsets.fromLTRB(20, 4, 20, 18),
@@ -132,7 +164,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       const AbsenEaseWordmark(fontSize: 16),
                       IconButton(
                         tooltip: 'Pemberitahuan',
-                        onPressed: () => Navigator.pushNamed(context, '/notifications'),
+                        onPressed: () =>
+                            Navigator.pushNamed(context, '/notifications'),
                         icon: const Icon(
                           Icons.notifications,
                           color: Colors.white,
@@ -144,12 +177,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const SizedBox(height: 6),
                   Row(
                     children: [
-                      const CircleAvatar(
+                      CircleAvatar(
                         radius: 20,
-                        backgroundColor: Color(0xFFE8D2C1),
+                        backgroundColor: const Color(0xFFE8D2C1),
                         child: Text(
-                          'JD',
-                          style: TextStyle(
+                          initials,
+                          style: const TextStyle(
                             color: AbsenEaseTheme.navy,
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
@@ -162,7 +195,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'John Doe',
+                              displayName,
                               style: GoogleFonts.inter(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w700,
@@ -170,7 +203,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                             ),
                             Text(
-                              'UI/UX Designer',
+                              displayRole,
                               style: GoogleFonts.inter(
                                 color: Colors.white70,
                                 fontSize: 10,
@@ -183,7 +216,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            '09:50 WIB',
+                            '$timeStr WIB',
                             style: GoogleFonts.inter(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
@@ -191,7 +224,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ),
                           Text(
-                            'Jum\'at 12 Februari 2023',
+                            dateStr,
                             style: GoogleFonts.inter(
                               color: Colors.white70,
                               fontSize: 8,
@@ -206,7 +239,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     children: [
                       IconButton(
                         tooltip: 'Kalender presensi',
-                        onPressed: () => Navigator.pushNamed(context, '/calendar'),
+                        onPressed: () =>
+                            Navigator.pushNamed(context, '/calendar'),
                         icon: const Icon(
                           Icons.event_note_rounded,
                           color: Colors.white,
@@ -234,7 +268,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ],
               ),
             ),
-            // Panel putih seperti lembar konten di referensi.
             Expanded(
               child: Container(
                 width: double.infinity,
@@ -242,62 +275,107 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   color: Colors.white,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
                 ),
-                child: ListView(
-                  padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _menuItem('Daftar\nKaryawan', Icons.people_alt_rounded,
-                            () => Navigator.pushNamed(context, '/employees')),
-                        _menuItem('Izin Cuti', Icons.event_available_rounded,
-                            () => Navigator.pushNamed(context, '/leave')),
-                        _menuItem('Kalender', Icons.calendar_month_rounded,
-                            () => Navigator.pushNamed(context, '/calendar')),
-                        _menuItem('Lembur', Icons.more_time_rounded,
-                            () => Navigator.pushNamed(context, '/overtime')),
-                      ],
-                    ),
-                    const SizedBox(height: 25),
-                    _sectionHeading(
-                      'Artikel',
-                      'Lihat Semua',
-                      () => Navigator.pushNamed(context, '/news'),
-                      subtitle: 'Baca artikel dari perusahaan',
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 153,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
+                child: RefreshIndicator(
+                  onRefresh: _loadAllData,
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          _articleCard('Agenda Bulan Januari', '01/01/2023'),
-                          const SizedBox(width: 10),
-                          _articleCard('WFH vs WFO', '22/12/2022'),
+                          _menuItem(
+                              'Daftar\nKaryawan',
+                              Icons.people_alt_rounded,
+                              () => Navigator.pushNamed(context, '/employees')),
+                          _menuItem(
+                              'Izin Cuti',
+                              Icons.event_available_rounded,
+                              () => Navigator.pushNamed(context, '/leave')),
+                          _menuItem(
+                              'Kalender',
+                              Icons.calendar_month_rounded,
+                              () => Navigator.pushNamed(context, '/calendar')),
+                          _menuItem(
+                              'Lembur',
+                              Icons.more_time_rounded,
+                              () => Navigator.pushNamed(context, '/overtime')),
                         ],
                       ),
-                    ),
-                    const SizedBox(height: 17),
-                    _sectionHeading(
-                      'Pemberitahuan',
-                      'Lihat Semua',
-                      () => Navigator.pushNamed(context, '/notifications'),
-                      subtitle: 'Daftar pemberitahuan terbaru',
-                    ),
-                    const SizedBox(height: 8),
-                    _notificationRow(
-                      '23 Mei 2023 Libur',
-                      'Ahmad Aswin',
-                      '06 Mar 2023',
-                    ),
-                    const Divider(height: 1, color: AbsenEaseTheme.border),
-                    _notificationRow(
-                      'Selamat Datang Anisa',
-                      'Pengumuman perusahaan',
-                      '03 Mar 2023',
-                    ),
-                    const Divider(height: 1, color: AbsenEaseTheme.border),
-                  ],
+                      const SizedBox(height: 25),
+                      _sectionHeading(
+                        'Artikel',
+                        'Lihat Semua',
+                        () => Navigator.pushNamed(context, '/news'),
+                        subtitle: 'Baca artikel dari perusahaan',
+                      ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        height: 153,
+                        child: _articles.isEmpty
+                            ? Center(
+                                child: Text(
+                                  'Belum ada artikel',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 11,
+                                    color: AbsenEaseTheme.textMuted,
+                                  ),
+                                ),
+                              )
+                            : ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: _articles.length,
+                                separatorBuilder: (_, __) =>
+                                    const SizedBox(width: 10),
+                                itemBuilder: (context, i) {
+                                  final art = _articles[i];
+                                  final title = art['title'] ?? 'Tanpa Judul';
+                                  final pub = art['published_at'] != null
+                                      ? DateFormat('dd/MM/yyyy').format(
+                                          DateTime.parse(art['published_at']))
+                                      : 'Terbaru';
+                                  return _articleCard(title, pub);
+                                },
+                              ),
+                      ),
+                      const SizedBox(height: 17),
+                      _sectionHeading(
+                        'Pemberitahuan',
+                        'Lihat Semua',
+                        () => Navigator.pushNamed(context, '/notifications'),
+                        subtitle: 'Daftar pemberitahuan terbaru',
+                      ),
+                      const SizedBox(height: 8),
+                      if (_notifications.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Center(
+                            child: Text(
+                              'Tidak ada pemberitahuan baru',
+                              style: GoogleFonts.inter(
+                                fontSize: 11,
+                                color: AbsenEaseTheme.textMuted,
+                              ),
+                            ),
+                          ),
+                        )
+                      else
+                        ..._notifications.map((n) {
+                          final title = n['title'] ?? 'Info';
+                          final msg = n['message'] ?? '';
+                          final dt = n['created_at'] != null
+                              ? DateFormat('dd MMM yyyy')
+                                  .format(DateTime.parse(n['created_at']))
+                              : '';
+                          return Column(
+                            children: [
+                              _notificationRow(title, msg, dt),
+                              const Divider(
+                                  height: 1, color: AbsenEaseTheme.border),
+                            ],
+                          );
+                        }),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -392,7 +470,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: const Color(0xFFF1F1F1)),
         boxShadow: const [
-          BoxShadow(color: Color(0x0C000000), blurRadius: 5, offset: Offset(0, 2)),
+          BoxShadow(
+              color: Color(0x0C000000), blurRadius: 5, offset: Offset(0, 2)),
         ],
       ),
       child: Column(
