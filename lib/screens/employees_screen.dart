@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/absentease_theme.dart';
+import '../core/theme/absentease_theme.dart';
+import '../features/employee/services/employee_service.dart';
 
-class EmployeesScreen extends StatelessWidget {
+class EmployeesScreen extends StatefulWidget {
   const EmployeesScreen({super.key});
 
-  final List<Map<String, String>> employees = const [
-    {'name': 'John Doe', 'role': 'UI/UX Designer', 'status': 'Hadir'},
-    {'name': 'Jane Smith', 'role': 'Product Manager', 'status': 'Hadir'},
-    {'name': 'Alex Johnson', 'role': 'Frontend Dev', 'status': 'Izin'},
-    {'name': 'Sarah Williams', 'role': 'Backend Dev', 'status': 'Hadir'},
-    {'name': 'Michael Brown', 'role': 'QA Engineer', 'status': 'Alpha'},
-  ];
+  @override
+  State<EmployeesScreen> createState() => _EmployeesScreenState();
+}
+
+class _EmployeesScreenState extends State<EmployeesScreen> {
+  final _service = EmployeeService();
+  late Future<List<Map<String, dynamic>>> _employees;
+
+  @override
+  void initState() {
+    super.initState();
+    _employees = _service.getAllEmployees();
+  }
+
+  Future<void> _reload() async {
+    setState(() => _employees = _service.getAllEmployees());
+    await _employees;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,75 +30,55 @@ class EmployeesScreen extends StatelessWidget {
       backgroundColor: AbsenEaseTheme.canvas,
       appBar: AppBar(
         backgroundColor: AbsenEaseTheme.navy,
-        title: const Text(
-          'Daftar Karyawan',
-          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
+        foregroundColor: Colors.white,
+        title: const Text('Daftar Karyawan'),
       ),
-      body: ListView.separated(
-        padding: const EdgeInsets.all(20),
-        itemCount: employees.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 12),
-        itemBuilder: (context, index) {
-          final emp = employees[index];
-          final isPresent = emp['status'] == 'Hadir';
-          final isLeave = emp['status'] == 'Izin';
-
-          Color badgeColor = isPresent
-              ? AbsenEaseTheme.success
-              : (isLeave ? AbsenEaseTheme.warning : Colors.red);
-
-          return Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AbsenEaseTheme.border),
-            ),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor: AbsenEaseTheme.navy,
-                  foregroundColor: Colors.white,
-                  child: Text(emp['name']!.substring(0, 2).toUpperCase()),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        emp['name']!,
-                        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        emp['role']!,
-                        style: const TextStyle(color: AbsenEaseTheme.textMuted, fontSize: 12),
-                      ),
-                    ],
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _employees,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(
+                child: Text('Gagal memuat data: ${snapshot.error}'));
+          }
+          final emps = snapshot.data ?? [];
+          if (emps.isEmpty) {
+            return const Center(child: Text('Belum ada data karyawan'));
+          }
+          return RefreshIndicator(
+            onRefresh: _reload,
+            child: ListView.separated(
+              padding: const EdgeInsets.all(16),
+              itemCount: emps.length,
+              separatorBuilder: (_, __) =>
+                  const Divider(height: 1, color: AbsenEaseTheme.border),
+              itemBuilder: (context, index) {
+                final emp = emps[index];
+                final name = emp['full_name']?.toString() ?? 'Tanpa Nama';
+                final position = emp['position']?.toString() ?? '';
+                final department = emp['department']?.toString() ?? '';
+                final initials = name.isNotEmpty
+                    ? name.split(' ').map((e) => e[0]).take(2).join().toUpperCase()
+                    : '?';
+                return ListTile(
+                  contentPadding: const EdgeInsets.symmetric(vertical: 6),
+                  leading: CircleAvatar(
+                    backgroundColor: AbsenEaseTheme.magenta.withAlpha(30),
+                    child: Text(initials,
+                        style: const TextStyle(
+                            color: AbsenEaseTheme.magenta,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13)),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: badgeColor.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    emp['status']!,
-                    style: TextStyle(
-                      color: badgeColor,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ],
+                  title: Text(name,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w700, fontSize: 13)),
+                  subtitle: Text('$position${department.isNotEmpty ? ' • $department' : ''}',
+                      style: const TextStyle(fontSize: 11)),
+                );
+              },
             ),
           );
         },
