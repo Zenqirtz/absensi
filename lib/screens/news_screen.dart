@@ -1,23 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../core/theme/absentease_theme.dart';
+import '../features/article/services/article_service.dart';
 
-class NewsScreen extends StatelessWidget {
+class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
 
-  static const List<Map<String, String>> _articles = [
-    {
-      'title': 'Tips Manajemen Waktu untuk Produktivitas Maksimal',
-      'date': 'Jum\'at 03 Maret 2023',
-      'body':
-          'Produktivitas bukan soal bekerja lebih lama, tapi bekerja lebih terarah. Mulai dengan memetakan tugas harian, lalu tentukan tiga prioritas utama. Batasi notifikasi saat sesi fokus berlangsung.',
-    },
-    {
-      'title': 'Pentingnya Disiplin Presensi Karyawan',
-      'date': 'Jum\'at 12 Februari 2023',
-      'body':
-          'Presensi yang konsisten membantu tim HR menghitung beban kerja dan mengatur jadwal shift. Catat kehadiran segera setelah tiba di kantor agar data tetap akurat.',
-    },
-  ];
+  @override
+  State<NewsScreen> createState() => _NewsScreenState();
+}
+
+class _NewsScreenState extends State<NewsScreen> {
+  final _service = ArticleService();
+  late Future<List<Map<String, dynamic>>> _articles;
+
+  @override
+  void initState() {
+    super.initState();
+    _articles = _service.getPublishedArticles(limit: 50);
+  }
+
+  Future<void> _reload() async {
+    setState(() => _articles = _service.getPublishedArticles(limit: 50));
+    await _articles;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,54 +31,85 @@ class NewsScreen extends StatelessWidget {
       backgroundColor: AbsenEaseTheme.canvas,
       appBar: AppBar(
         backgroundColor: AbsenEaseTheme.navy,
-        title: const Text(
-          'Artikel',
-          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
+        foregroundColor: Colors.white,
+        title: const Text('Artikel'),
       ),
-      body: ListView.separated(
-        padding: const EdgeInsets.all(20),
-        itemCount: _articles.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 12),
-        itemBuilder: (context, index) {
-          final article = _articles[index];
-          return Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AbsenEaseTheme.border),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  article['title']!,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: AbsenEaseTheme.textDark,
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _articles,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(
+                child: Text('Gagal memuat artikel: ${snapshot.error}'));
+          }
+          final articles = snapshot.data ?? [];
+          if (articles.isEmpty) {
+            return const Center(child: Text('Belum ada artikel yang diterbitkan'));
+          }
+          return RefreshIndicator(
+            onRefresh: _reload,
+            child: ListView.separated(
+              padding: const EdgeInsets.all(20),
+              itemCount: articles.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 14),
+              itemBuilder: (context, index) {
+                final art = articles[index];
+                final title = art['title']?.toString() ?? 'Tanpa Judul';
+                final content = art['content']?.toString() ?? '';
+                final pub = art['published_at'] != null
+                    ? DateFormat('dd MMMM yyyy', 'id_ID')
+                        .format(DateTime.parse(art['published_at']))
+                    : 'Terbaru';
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: AbsenEaseTheme.border),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  article['date']!,
-                  style: const TextStyle(fontSize: 11, color: AbsenEaseTheme.textMuted),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  article['body']!,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    height: 1.5,
-                    color: AbsenEaseTheme.textMuted,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 130,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE5E7EB),
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(14)),
+                        ),
+                        child: const Center(
+                          child: Icon(Icons.article_rounded,
+                              color: Color(0xFFD1D5DB), size: 40),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(title,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w700, fontSize: 14)),
+                            const SizedBox(height: 4),
+                            Text(pub,
+                                style: const TextStyle(
+                                    fontSize: 11,
+                                    color: AbsenEaseTheme.textMuted)),
+                            if (content.isNotEmpty) ...[
+                              const SizedBox(height: 8),
+                              Text(content,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 12)),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                );
+              },
             ),
           );
         },
