@@ -8,14 +8,37 @@ class EmployeeService {
   Future<Map<String, dynamic>?> getProfile() async {
     final client = _client;
     if (client == null) return null;
-    final uid = client.auth.currentUser?.id;
+    final user = client.auth.currentUser;
+    final uid = user?.id;
     if (uid == null) return null;
-    final res = await client
-        .from('employees')
-        .select()
-        .eq('id', uid)
-        .maybeSingle();
-    return res;
+
+    try {
+      final res = await client
+          .from('employees')
+          .select()
+          .eq('id', uid)
+          .maybeSingle();
+
+      if (res != null) return res;
+
+      // Jika belum ada row di employees, buat otomatis dari auth user metadata
+      final metaName = user?.userMetadata?['full_name']?.toString();
+      final email = user?.email ?? '';
+      final fallbackName = (metaName != null && metaName.trim().isNotEmpty)
+          ? metaName
+          : email.split('@').first;
+
+      final inserted = await client.from('employees').insert({
+        'id': uid,
+        'email': email,
+        'full_name': fallbackName,
+        'role': 'Staff',
+      }).select().maybeSingle();
+
+      return inserted;
+    } catch (_) {
+      return null;
+    }
   }
 
   Future<List<Map<String, dynamic>>> getAllEmployees() async {
