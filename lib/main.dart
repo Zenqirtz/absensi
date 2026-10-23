@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'core/config/supabase_config.dart';
 import 'core/theme/absentease_theme.dart';
 import 'features/auth/screens/absentease_login_screen.dart';
@@ -12,6 +13,7 @@ import 'screens/news_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('id_ID', null);
   await SupabaseConfig.initialize();
   runApp(const AbsenEaseApp());
 }
