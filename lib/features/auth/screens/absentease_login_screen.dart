@@ -5,6 +5,7 @@ import '../../../core/config/supabase_config.dart';
 import '../../../core/theme/absentease_theme.dart';
 import '../../../core/widgets/absentease_brand.dart';
 import '../services/auth_service.dart';
+import '../widgets/register_bottom_sheet.dart';
 
 /// Layar Login — referensi layar tengah.
 /// Struktur visual:
@@ -318,6 +319,43 @@ class _AbsenEaseLoginScreenState extends State<AbsenEaseLoginScreen> {
                         ),
                       )
                     : const Text('Login'),
+              ),
+              const SizedBox(height: 14),
+              // Link Daftar Akun Baru
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Belum punya akun? ',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      color: AbsenEaseTheme.textMuted,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => const RegisterBottomSheet(),
+                      );
+                    },
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: Text(
+                      'Daftar di sini',
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        color: AbsenEaseTheme.magenta,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
             ],
