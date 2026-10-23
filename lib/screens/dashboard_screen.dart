@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -72,7 +73,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           accuracy: LocationAccuracy.best,
           distanceFilter: 0,
         ),
-      );
+      ).timeout(const Duration(seconds: 8), onTimeout: () {
+        throw TimeoutException('Lokasi tidak terdeteksi');
+      });
     } catch (_) {
       return null;
     }
@@ -83,49 +86,60 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final timeStr = DateFormat('HH:mm').format(now);
     final dateStr = DateFormat('EEEE, dd MMMM yyyy', 'id_ID').format(now);
 
-    if (SupabaseConfig.isConfigured) {
-      setState(() => _isLoading = true);
-      try {
-        final pos = await _getCurrentLocation();
-        final lat = pos?.latitude ?? -6.2088;
-        final lng = pos?.longitude ?? 106.8456;
-
-        if (!_checkedIn) {
-          await _attendanceService.checkIn(
-            latitude: lat,
-            longitude: lng,
-            address: pos != null ? 'Koordinat ($lat, $lng)' : 'Kantor Pusat',
-          );
-        } else {
-          await _attendanceService.checkOut(
-            latitude: lat,
-            longitude: lng,
-            address: pos != null ? 'Koordinat ($lat, $lng)' : 'Kantor Pusat',
-          );
-        }
-      } catch (e) {
+    setState(() => _isLoading = true);
+    try {
+      if (!SupabaseConfig.isConfigured) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Gagal mencatat presensi: $e')),
+            const SnackBar(
+              content: Text('Supabase belum dikonfigurasi. Isi .env dan restart.'),
+              backgroundColor: Colors.orange,
+            ),
           );
         }
-      } finally {
-        if (mounted) setState(() => _isLoading = false);
+        return;
       }
+
+      final pos = await _getCurrentLocation();
+      final lat = pos?.latitude ?? -6.2088;
+      final lng = pos?.longitude ?? 106.8456;
+
+      if (!_checkedIn) {
+        await _attendanceService.checkIn(
+          latitude: lat,
+          longitude: lng,
+          address: pos != null ? 'Koordinat ($lat, $lng)' : 'Kantor Pusat',
+        );
+      } else {
+        await _attendanceService.checkOut(
+          latitude: lat,
+          longitude: lng,
+          address: pos != null ? 'Koordinat ($lat, $lng)' : 'Kantor Pusat',
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal mencatat presensi: $e')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
 
     if (!mounted) return;
     setState(() => _checkedIn = !_checkedIn);
 
-    final currentEmail = SupabaseConfig.isConfigured
-        ? (SupabaseConfig.client.auth.currentUser?.email ?? 'John Doe')
-        : 'John Doe';
-    final currentName = _profile?['full_name'] ?? currentEmail;
+    final currentUser = SupabaseConfig.clientOrNull?.auth.currentUser;
+    final displayName = _profile?['full_name'] ??
+        currentUser?.userMetadata?['full_name']?.toString() ??
+        currentUser?.email?.split('@').first ??
+        'John Doe';
 
     showDialog<void>(
       context: context,
       builder: (context) => SuksesAbsenDialog(
-        nama: currentName,
+        nama: displayName,
         tanggal: dateStr.isNotEmpty ? dateStr : 'Jum\'at 03 Maret 2023',
         waktu: '$timeStr WIB',
         status: _checkedIn ? 'Absen Masuk' : 'Absen Pulang',
@@ -140,8 +154,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final timeStr = DateFormat('HH:mm').format(now);
     final dateStr = DateFormat('EEEE dd MMMM yyyy', 'id_ID').format(now);
 
+    final currentUser = SupabaseConfig.clientOrNull?.auth.currentUser;
     final displayName = _profile?['full_name'] ??
-        SupabaseConfig.clientOrNull?.auth.currentUser?.email?.split('@').first ??
+        currentUser?.userMetadata?['full_name']?.toString() ??
+        currentUser?.email?.split('@').first ??
         'John Doe';
     final displayRole = _profile?['role'] ?? 'Staff';
     final initials = displayName.length >= 2
