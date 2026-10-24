@@ -102,6 +102,21 @@ class AttendanceService {
     return List<Map<String, dynamic>>.from(response);
   }
 
+  /// Stream presensi real-time dari Supabase untuk user aktif.
+  Stream<List<Map<String, dynamic>>> streamAttendance() {
+    final client = _client;
+    final userId = _userId;
+    if (client == null || userId == null) return const Stream.empty();
+    try {
+      return client
+          .from('attendance')
+          .stream(primaryKey: ['id'])
+          .eq('employee_id', userId);
+    } catch (_) {
+      return const Stream.empty();
+    }
+  }
+
   /// Cek apakah sudah absen masuk hari ini.
   Future<bool> hasCheckedInToday() async {
     final today = await getTodayAttendance();
