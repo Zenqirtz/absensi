@@ -11,6 +11,7 @@ import 'screens/overtime_screen.dart';
 import 'screens/notifications_screen.dart';
 import 'screens/news_screen.dart';
 import 'screens/profile_screen.dart';
+import 'screens/admin_panel_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,6 +39,7 @@ class AbsenEaseApp extends StatelessWidget {
         '/notifications': (context) => const NotificationsScreen(),
         '/news': (context) => const NewsScreen(),
         '/profile': (context) => const ProfileScreen(),
+        '/admin': (context) => const AdminPanelScreen(),
       },
       initialRoute: '/',
     );
