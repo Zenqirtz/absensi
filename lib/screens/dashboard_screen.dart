@@ -58,10 +58,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<Position?> _getCurrentLocation() async {
     try {
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) return null;
 
-      LocationPermission permission = await Geolocator.checkPermission();
+      var permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) return null;
@@ -70,12 +70,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
       return await Geolocator.getCurrentPosition(
         locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.best,
-          distanceFilter: 0,
+          accuracy: LocationAccuracy.low,
         ),
-      ).timeout(const Duration(seconds: 8), onTimeout: () {
-        throw TimeoutException('Lokasi tidak terdeteksi');
-      });
+      );
     } catch (_) {
       return null;
     }
@@ -100,7 +97,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return;
       }
 
-      final pos = await _getCurrentLocation();
+      // Ambil lokasi dengan timeout singkat
+      Position? pos;
+      try {
+        pos = await _getCurrentLocation().timeout(
+          const Duration(seconds: 4),
+          onTimeout: () => throw TimeoutException('Lokasi tidak tersedia'),
+        );
+      } catch (_) {
+        // Lanjutkan dengan lokasi default jika gagal
+      }
+
       final lat = pos?.latitude ?? -6.2088;
       final lng = pos?.longitude ?? 106.8456;
 
