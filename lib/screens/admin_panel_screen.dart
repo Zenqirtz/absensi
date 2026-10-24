@@ -226,11 +226,12 @@ class _AdminPanelScreenState extends State<AdminPanelScreen>
           controller: _tabController,
           indicatorColor: AbsenEaseTheme.magenta,
           indicatorWeight: 3,
+          indicatorSize: TabBarIndicatorSize.tab,
           labelColor: Colors.white,
           unselectedLabelColor: Colors.white54,
-          isScrollable: true,
-          tabAlignment: TabAlignment.start,
-          labelStyle: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 11),
+          isScrollable: false,
+          labelPadding: const EdgeInsets.symmetric(horizontal: 4),
+          labelStyle: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 10),
           tabs: [
             Tab(
               text: 'Izin (${_pendingLeaves.length})',
@@ -630,16 +631,15 @@ class _AdminPanelScreenState extends State<AdminPanelScreen>
             ),
           ),
           const Spacer(),
-          if (isActive)
-            IconButton(
-              onPressed: () => _deactivateEmployee(id),
-              icon: const Icon(Icons.person_off_outlined, size: 18),
-              color: Colors.redAccent,
-              tooltip: 'Nonaktifkan',
-              style: IconButton.styleFrom(
-                  padding: const EdgeInsets.all(6),
-                  minimumSize: const Size(32, 32)),
-            ),
+          IconButton(
+            onPressed: () => _deleteEmployee(id),
+            icon: const Icon(Icons.delete_outline_rounded, size: 20),
+            color: Colors.redAccent,
+            tooltip: 'Hapus karyawan',
+            style: IconButton.styleFrom(
+                padding: const EdgeInsets.all(6),
+                minimumSize: const Size(40, 40)),
+          ),
         ]),
       ]),
     );
@@ -652,12 +652,16 @@ class _AdminPanelScreenState extends State<AdminPanelScreen>
     if (ok) _loadStaff();
   }
 
-  Future<void> _deactivateEmployee(String id) async {
-    final confirm = await _confirm('Nonaktifkan karyawan ini?');
-    if (!confirm) return;
-    final ok = await _staffService.deactivateEmployee(id);
-    _showResult(ok, 'Karyawan dinonaktifkan', 'Gagal menonaktifkan');
-    if (ok) _loadStaff();
+  Future<void> _deleteEmployee(String id) async {
+    final confirm = await _confirm(
+      'Hapus karyawan ini dari daftar? Data akun dan riwayat presensi tetap tersimpan.',
+    );
+    if (!confirm || !mounted) return;
+
+    final ok = await _staffService.deleteEmployee(id);
+    if (!mounted) return;
+    _showResult(ok, 'Karyawan dihapus dari daftar', 'Gagal menghapus karyawan');
+    if (ok) await _loadStaff();
   }
 
   void _showAddEmployeeSheet() {
