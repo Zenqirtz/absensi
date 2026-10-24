@@ -131,10 +131,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     setState(() => _checkedIn = !_checkedIn);
 
     final currentUser = SupabaseConfig.clientOrNull?.auth.currentUser;
-    final displayName = _profile?['full_name'] ??
-        currentUser?.userMetadata?['full_name']?.toString() ??
-        currentUser?.email?.split('@').first ??
-        'John Doe';
+    final metadataName = currentUser?.userMetadata?['full_name']?.toString().trim();
+    final profileName = _profile?['full_name']?.toString().trim();
+    final displayName = (metadataName != null && metadataName.isNotEmpty)
+        ? metadataName
+        : (profileName != null && profileName.isNotEmpty)
+            ? profileName
+            : currentUser?.email?.split('@').first ?? 'John Doe';
 
     showDialog<void>(
       context: context,
@@ -155,10 +158,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final dateStr = DateFormat('EEEE dd MMMM yyyy', 'id_ID').format(now);
 
     final currentUser = SupabaseConfig.clientOrNull?.auth.currentUser;
-    final displayName = _profile?['full_name'] ??
-        currentUser?.userMetadata?['full_name']?.toString() ??
-        currentUser?.email?.split('@').first ??
-        'John Doe';
+    final metadataName = currentUser?.userMetadata?['full_name']?.toString().trim();
+    final profileName = _profile?['full_name']?.toString().trim();
+    final displayName = (metadataName != null && metadataName.isNotEmpty)
+        ? metadataName
+        : (profileName != null && profileName.isNotEmpty)
+            ? profileName
+            : currentUser?.email?.split('@').first ?? 'John Doe';
     final displayRole = _profile?['role'] ?? 'Staff';
     final initials = displayName.length >= 2
         ? displayName.substring(0, 2).toUpperCase()
