@@ -11,6 +11,7 @@ import '../features/attendance/widgets/sukses_absen_dialog.dart';
 import '../features/employee/services/employee_service.dart';
 import '../features/article/services/article_service.dart';
 import '../features/notification/services/notification_service.dart';
+import '../features/admin/services/admin_settings_service.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -24,6 +25,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final _employeeService = EmployeeService();
   final _articleService = ArticleService();
   final _notificationService = NotificationService();
+  final _settingsService = AdminSettingsService();
 
   bool _checkedIn = false;
   bool _isLoading = false;
@@ -119,6 +121,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
       final lat = pos?.latitude ?? -6.2088;
       final lng = pos?.longitude ?? 106.8456;
+
+      // Geofencing verification
+      final settings = await _settingsService.getSettings();
+      final officeLat = (settings['office_latitude'] as num?)?.toDouble() ?? -6.2;
+      final officeLng = (settings['office_longitude'] as num?)?.toDouble() ?? 106.816666;
+      final radiusMeters = (settings['radius_meters'] as num?)?.toInt() ?? 100;
+
+      if (pos != null) {
+        final distance = Geolocator.distanceBetween(lat, lng, officeLat, officeLng);
+        if (distance > radiusMeters) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                    'Di luar area kantor (${distance.toInt()}m dari radius ${radiusMeters}m). Dekati kantor untuk absen.'),
+                backgroundColor: Colors.redAccent,
+              ),
+            );
+          }
+          return;
+        }
+      }
 
       if (!_checkedIn) {
         await _attendanceService.checkIn(
