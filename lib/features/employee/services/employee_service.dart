@@ -19,14 +19,31 @@ class EmployeeService {
           .eq('id', uid)
           .maybeSingle();
 
-      if (res != null) return res;
-
-      // Jika belum ada row di employees, buat otomatis dari auth user metadata
-      final metaName = user?.userMetadata?['full_name']?.toString();
+      final metaName = user?.userMetadata?['full_name']?.toString().trim();
       final email = user?.email ?? '';
-      final fallbackName = (metaName != null && metaName.trim().isNotEmpty)
+      final emailPrefix = email.split('@').first;
+
+      if (res != null) {
+        // Jika di database masih nama email atau kosong, perbarui dengan metadata
+        final currentDbName = res['full_name']?.toString().trim();
+        if (metaName != null &&
+            metaName.isNotEmpty &&
+            (currentDbName == null || currentDbName.isEmpty || currentDbName == emailPrefix)) {
+          try {
+            await client
+                .from('employees')
+                .update({'full_name': metaName})
+                .eq('id', uid);
+            res['full_name'] = metaName;
+          } catch (_) {}
+        }
+        return res;
+      }
+
+      // Jika belum ada row di employees, buat baru
+      final fallbackName = (metaName != null && metaName.isNotEmpty)
           ? metaName
-          : email.split('@').first;
+          : emailPrefix;
 
       final inserted = await client.from('employees').insert({
         'id': uid,
