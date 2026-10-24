@@ -49,10 +49,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final metaRole = user?.userMetadata?['role']?.toString() ?? '';
     final metaDept = user?.userMetadata?['department']?.toString() ?? '';
     final metaAvatar = user?.userMetadata?['avatar_url']?.toString() ?? '';
+    final metaPhone = user?.userMetadata?['phone']?.toString() ?? '';
 
     _nameController.text = metaName;
     _roleController.text = metaRole.isNotEmpty ? metaRole : 'Staff';
     _departmentController.text = metaDept;
+    _phoneController.text = metaPhone;
     _avatarUrl = metaAvatar;
 
     try {
@@ -94,13 +96,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     setState(() => _isSaving = true);
     try {
-      // 1. Update auth user metadata
+      // 1. Update auth user metadata (termasuk phone)
       await SupabaseConfig.client.auth.updateUser(
         UserAttributes(
           data: {
             'full_name': name,
             'role': role,
             'department': department,
+            'phone': phone,
             if (_avatarUrl != null) 'avatar_url': _avatarUrl,
           },
         ),
@@ -120,7 +123,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
             'avatar_url': _avatarUrl,
             'updated_at': DateTime.now().toIso8601String(),
           });
-        } catch (_) {}
+        } catch (e) {
+          debugPrint('Upsert employee error: $e');
+          // Jangan re-throw, metadata auth sudah tersimpan
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Peringatan: Data profil tidak sepenuhnya tersimpan. Error: $e'),
+                backgroundColor: Colors.orange,
+                duration: const Duration(seconds: 4),
+              ),
+            );
+          }
+        }
       }
 
       if (mounted) {
