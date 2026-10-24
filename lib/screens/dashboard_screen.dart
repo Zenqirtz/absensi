@@ -30,6 +30,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool _checkedIn = false;
   bool _isLoading = false;
   bool _isAdmin = false;
+  DateTime _currentTime = DateTime.now();
+  Timer? _clockTimer;
 
   Map<String, dynamic>? _profile;
   List<Map<String, dynamic>> _articles = [];
@@ -38,7 +40,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
+    _currentTime = DateTime.now();
+    _clockTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (mounted) setState(() => _currentTime = DateTime.now());
+    });
     _loadAllData();
+  }
+
+  @override
+  void dispose() {
+    _clockTimer?.cancel();
+    super.dispose();
   }
 
   Future<void> _loadAllData() async {
@@ -193,8 +205,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final timeStr = DateFormat('HH:mm').format(now);
+    final now = _currentTime;
+    final timeStr = DateFormat('HH:mm:ss').format(now);
     final dateStr = DateFormat('EEEE dd MMMM yyyy', 'id_ID').format(now);
 
     final currentUser = SupabaseConfig.clientOrNull?.auth.currentUser;
