@@ -27,6 +27,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   bool _checkedIn = false;
   bool _isLoading = false;
+  bool _isAdmin = false;
 
   Map<String, dynamic>? _profile;
   List<Map<String, dynamic>> _articles = [];
@@ -45,12 +46,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
       final profile = await _employeeService.getProfile();
       final articles = await _articleService.getPublishedArticles(limit: 5);
       final notifs = await _notificationService.getMyNotifications(limit: 3);
+
+      final user = SupabaseConfig.clientOrNull?.auth.currentUser;
+      final role = (profile?['role'] ?? user?.userMetadata?['role'] ?? '')
+          .toString()
+          .toLowerCase();
+      final isAdmin = role == 'admin' || role.contains('hr') || role.contains('manager');
+
       if (mounted) {
         setState(() {
           _checkedIn = checked;
           _profile = profile;
           _articles = articles;
           _notifications = notifs;
+          _isAdmin = isAdmin;
         });
       }
     } catch (_) {}
@@ -360,6 +369,59 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               () => Navigator.pushNamed(context, '/overtime')),
                         ],
                       ),
+                      if (_isAdmin) ...[
+                        const SizedBox(height: 18),
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: AbsenEaseTheme.magenta.withAlpha(25),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: AbsenEaseTheme.magenta.withAlpha(60),
+                              width: 1.5,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.admin_panel_settings_rounded,
+                                  color: AbsenEaseTheme.magenta, size: 22),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Anda adalah Administrator',
+                                      style: GoogleFonts.inter(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 12,
+                                        color: AbsenEaseTheme.textDark,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Kelola persetujuan dan monitoring',
+                                      style: GoogleFonts.inter(
+                                        fontSize: 10,
+                                        color: AbsenEaseTheme.textMuted,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pushNamed(context, '/admin'),
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: Size.zero,
+                                ),
+                                child: const Icon(Icons.arrow_forward_rounded,
+                                    color: AbsenEaseTheme.magenta, size: 20),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                       const SizedBox(height: 25),
                       _sectionHeading(
                         'Artikel',
