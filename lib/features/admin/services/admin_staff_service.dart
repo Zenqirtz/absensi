@@ -9,7 +9,11 @@ class AdminStaffService {
     final client = _client;
     if (client == null) return [];
     try {
-      final res = await client.from('employees').select().order('full_name');
+      final res = await client
+          .from('employees')
+          .select()
+          .eq('is_active', true)
+          .order('full_name');
       return List<Map<String, dynamic>>.from(res);
     } catch (_) {
       return [];
@@ -84,14 +88,29 @@ class AdminStaffService {
     }
   }
 
-  Future<bool> deactivateEmployee(String id) async {
+  Future<bool> deleteEmployee(String id) async {
     final client = _client;
     if (client == null) return false;
     try {
+      // 1. Set is_active ke false
       await client.from('employees').update({'is_active': false}).eq('id', id);
+
+      // 2. Coba delete permanen (jika ada cascade/tanpa FK block)
+      try {
+        await client.from('attendance').delete().eq('employee_id', id);
+        await client.from('leaves').delete().eq('employee_id', id);
+        await client.from('overtime').delete().eq('employee_id', id);
+        await client.from('employees').delete().eq('id', id);
+      } catch (_) {
+        // FK block, tapi is_active sudah false sehingga tidak akan muncul di daftar
+      }
       return true;
     } catch (_) {
       return false;
     }
+  }
+
+  Future<bool> deactivateEmployee(String id) async {
+    return deleteEmployee(id);
   }
 }
