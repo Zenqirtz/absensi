@@ -102,7 +102,9 @@ class _AdminPanelScreenState extends State<AdminPanelScreen>
   }
 
   Future<void> _loadStaff() async {
+    debugPrint('_loadStaff: starting...');
     final staff = await _staffService.getAllEmployees();
+    debugPrint('_loadStaff: got ${staff.length} employees');
     if (mounted) setState(() => _employees = staff);
   }
 
@@ -658,10 +660,18 @@ class _AdminPanelScreenState extends State<AdminPanelScreen>
     );
     if (!confirm || !mounted) return;
 
+    // Optimistic update: hapus dari list lokal langsung
+    setState(() {
+      _employees.removeWhere((e) => e['id']?.toString() == id);
+    });
+
     final ok = await _staffService.deleteEmployee(id);
     if (!mounted) return;
     _showResult(ok, 'Karyawan dihapus dari daftar', 'Gagal menghapus karyawan');
-    if (ok) await _loadStaff();
+    if (!ok) {
+      // Jika gagal, refresh ulang untuk mengembalikan data asli
+      await _loadStaff();
+    }
   }
 
   void _showAddEmployeeSheet() {

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/config/supabase_config.dart';
 
@@ -7,15 +8,20 @@ class AdminStaffService {
 
   Future<List<Map<String, dynamic>>> getAllEmployees() async {
     final client = _client;
-    if (client == null) return [];
+    if (client == null) {
+      debugPrint('AdminStaffService: client is null, isConfigured=${SupabaseConfig.isConfigured}');
+      return [];
+    }
     try {
       final res = await client
           .from('employees')
           .select()
           .eq('is_active', true)
           .order('full_name');
+      debugPrint('AdminStaffService: fetched ${res.length} employees');
       return List<Map<String, dynamic>>.from(res);
-    } catch (_) {
+    } catch (e) {
+      debugPrint('AdminStaffService: error fetching employees: $e');
       return [];
     }
   }
