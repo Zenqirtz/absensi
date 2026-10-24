@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import '../core/config/supabase_config.dart';
 import '../core/theme/absentease_theme.dart';
 import '../features/article/services/article_service.dart';
 
@@ -17,11 +19,11 @@ class _NewsScreenState extends State<NewsScreen> {
   @override
   void initState() {
     super.initState();
-    _articles = _service.getPublishedArticles(limit: 50);
+    _articles = _service.getPublishedArticles(limit: 20);
   }
 
   Future<void> _reload() async {
-    setState(() => _articles = _service.getPublishedArticles(limit: 50));
+    setState(() => _articles = _service.getPublishedArticles(limit: 20));
     await _articles;
   }
 
@@ -32,7 +34,7 @@ class _NewsScreenState extends State<NewsScreen> {
       appBar: AppBar(
         backgroundColor: AbsenEaseTheme.navy,
         foregroundColor: Colors.white,
-        title: const Text('Artikel'),
+        title: const Text('Berita & Artikel'),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: _articles,
@@ -41,12 +43,15 @@ class _NewsScreenState extends State<NewsScreen> {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
-            return Center(
-                child: Text('Gagal memuat artikel: ${snapshot.error}'));
+            return Center(child: Text('Gagal memuat artikel: ${snapshot.error}'));
           }
           final articles = snapshot.data ?? [];
           if (articles.isEmpty) {
-            return const Center(child: Text('Belum ada artikel yang diterbitkan'));
+            return Center(
+              child: Text(SupabaseConfig.isConfigured
+                  ? 'Belum ada artikel yang dipublikasikan'
+                  : 'Hubungkan Supabase untuk melihat artikel'),
+            );
           }
           return RefreshIndicator(
             onRefresh: _reload,
@@ -54,55 +59,72 @@ class _NewsScreenState extends State<NewsScreen> {
               padding: const EdgeInsets.all(20),
               itemCount: articles.length,
               separatorBuilder: (_, __) => const SizedBox(height: 14),
-              itemBuilder: (context, index) {
-                final art = articles[index];
+              itemBuilder: (context, i) {
+                final art = articles[i];
                 final title = art['title']?.toString() ?? 'Tanpa Judul';
                 final content = art['content']?.toString() ?? '';
-                final pub = art['published_at'] != null
+                final pubDate = art['published_at'] != null
                     ? DateFormat('dd MMMM yyyy', 'id_ID')
                         .format(DateTime.parse(art['published_at']))
                     : 'Terbaru';
                 return Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: AbsenEaseTheme.border),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        height: 130,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFE5E7EB),
-                          borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(14)),
+                        width: double.infinity,
+                        height: 150,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFF3F4F6),
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(11)),
                         ),
-                        child: const Center(
-                          child: Icon(Icons.article_rounded,
-                              color: Color(0xFFD1D5DB), size: 40),
+                        child: Center(
+                          child: Icon(
+                            Icons.image_not_supported_rounded,
+                            color: AbsenEaseTheme.textMuted,
+                            size: 36,
+                          ),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(14),
+                        padding: const EdgeInsets.all(12),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(title,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w700, fontSize: 14)),
-                            const SizedBox(height: 4),
-                            Text(pub,
-                                style: const TextStyle(
-                                    fontSize: 11,
-                                    color: AbsenEaseTheme.textMuted)),
-                            if (content.isNotEmpty) ...[
-                              const SizedBox(height: 8),
-                              Text(content,
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 12)),
-                            ],
+                            Text(
+                              title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: AbsenEaseTheme.textDark,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              content,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.inter(
+                                fontSize: 11,
+                                color: AbsenEaseTheme.textMuted,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              pubDate,
+                              style: GoogleFonts.inter(
+                                fontSize: 9,
+                                color: AbsenEaseTheme.textMuted,
+                              ),
+                            ),
                           ],
                         ),
                       ),
