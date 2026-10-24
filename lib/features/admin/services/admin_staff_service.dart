@@ -98,20 +98,14 @@ class AdminStaffService {
     final client = _client;
     if (client == null) return false;
     try {
-      // 1. Set is_active ke false
-      await client.from('employees').update({'is_active': false}).eq('id', id);
-
-      // 2. Coba delete permanen (jika ada cascade/tanpa FK block)
-      try {
-        await client.from('attendance').delete().eq('employee_id', id);
-        await client.from('leaves').delete().eq('employee_id', id);
-        await client.from('overtime').delete().eq('employee_id', id);
-        await client.from('employees').delete().eq('id', id);
-      } catch (_) {
-        // FK block, tapi is_active sudah false sehingga tidak akan muncul di daftar
-      }
-      return true;
-    } catch (_) {
+      final updated = await client
+          .from('employees')
+          .update({'is_active': false})
+          .eq('id', id)
+          .select('id');
+      return updated.isNotEmpty;
+    } catch (error) {
+      debugPrint('AdminStaffService.deleteEmployee failed: $error');
       return false;
     }
   }
