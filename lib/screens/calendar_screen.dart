@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../core/theme/absentease_theme.dart';
 import '../features/attendance/services/attendance_service.dart';
@@ -16,11 +17,11 @@ class CalendarScreen extends StatefulWidget {
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
-  DateTime _month = DateTime(2023, 3);
-  DateTime? _selected = DateTime(2023, 3, 17);
+  DateTime _month = DateTime(DateTime.now().year, DateTime.now().month);
+  DateTime? _selected = DateTime.now();
 
   final _attendanceService = AttendanceService();
-  Set<DateTime> _daysWithAttendance = {};
+  StreamSubscription<List<Map<String, dynamic>>>? _attendanceSubscription;
 
   static const List<String> _monthNames = [
     'Januari',
@@ -67,22 +68,54 @@ class _CalendarScreenState extends State<CalendarScreen> {
       month: _month.month,
     );
     if (!mounted) return;
+    final Map<DateTime, Map<String, dynamic>> map = {};
+    for (final d in days) {
+      final dt = DateTime.parse(d['check_time'].toString());
+      final day = DateTime(dt.year, dt.month, dt.day);
+      // Simpan check-in terbaru per hari
+      if (d['type'] == 'check_in') {
+        map[day] = d;
+      }
+    }
     setState(() {
-      _daysWithAttendance = days.map((d) {
-        final dt = DateTime.parse(d['check_time'].toString());
-        return DateTime(dt.year, dt.month, dt.day);
-      }).toSet();
+      _daysCheckIns = map;
     });
   }
 
-  bool _hasDot(DateTime day) {
-    return _daysWithAttendance.any((d) => d == day);
+  Map<DateTime, Map<String, dynamic>> _daysCheckIns = {};
+
+  /// Ambil data check-in untuk tanggal tertentu
+  Map<String, dynamic>? _checkInFor(DateTime day) {
+    return _daysCheckIns[day];
+  }
+
+  /// Status tanggal: 'present' (ada check-in), 'absent' (belum), 'future' (belum tiba)
+  String _dayStatus(DateTime day) {
+    final today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    if (day.isAfter(today)) return 'future';
+    final checkIn = _checkInFor(day);
+    if (checkIn != null && checkIn['type'] == 'check_in') return 'present';
+    return 'absent';
+  }
+
+  void _startRealTimeListener() {
+    _attendanceSubscription?.cancel();
+    _attendanceSubscription = _attendanceService.streamAttendance().listen((_) {
+      _loadAttendance();
+    });
   }
 
   @override
   void initState() {
     super.initState();
     _loadAttendance();
+    _startRealTimeListener();
+  }
+
+  @override
+  void dispose() {
+    _attendanceSubscription?.cancel();
+    super.dispose();
   }
 
   @override
@@ -186,12 +219,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     return Container();
                   }
                   final day = index - startOffset + 1;
+                  final dayDate = DateTime(_month.year, _month.month, day);
+                  final status = _dayStatus(dayDate);
                   final isSelected = _selected != null &&
                       _selected!.year == _month.year &&
                       _selected!.month == _month.month &&
                       _selected!.day == day;
-                  final dayDate = DateTime(_month.year, _month.month, day);
-                  final hasAttendance = _hasDot(dayDate);
 
                   return GestureDetector(
                     onTap: () => _selectDate(day),
@@ -199,7 +232,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: isSelected ? AbsenEaseTheme.magenta : Colors.white,
-                        shape: isSelected ? BoxShape.circle : BoxShape.rectangle,
+                        shape: BoxShape.circle,
                       ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -212,13 +245,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
                               fontSize: 13,
                             ),
                           ),
-                          if (hasAttendance)
+                          const SizedBox(height: 2),
+                          if (status != 'future')
                             Container(
-                              margin: const EdgeInsets.only(top: 2),
-                              width: 4,
-                              height: 4,
-                              decoration: const BoxDecoration(
-                                color: AbsenEaseTheme.magenta,
+                              width: 6,
+                              height: 6,
+                              decoration: BoxDecoration(
+                                color:
+                                    status == 'present'
+                                        ? const Color(0xFF2563EB) // biru
+                                        : Colors.red, // merah
                                 shape: BoxShape.circle,
                               ),
                             ),
@@ -227,6 +263,45 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     ),
                   );
                 },
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Legend
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF2563EB),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      const Text('Hadir', style: TextStyle(fontSize: 11)),
+                    ],
+                  ),
+                  const SizedBox(width: 20),
+                  Row(
+                    children: [
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      const Text('Tidak Hadir', style: TextStyle(fontSize: 11)),
+                    ],
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 10),
