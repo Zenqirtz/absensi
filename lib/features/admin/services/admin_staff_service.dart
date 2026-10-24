@@ -33,36 +33,39 @@ class AdminStaffService {
     String? phone,
   }) async {
     final client = _client;
-    if (client == null) return false;
+    if (client == null) {
+      debugPrint('AdminStaffService.addEmployee: client is null');
+      return false;
+    }
     try {
-      debugPrint('AdminStaffService.addEmployee: inserting employee $email...');
+      debugPrint('AdminStaffService.addEmployee: invoking create-employee...');
+      debugPrint('AdminStaffService.addEmployee: email=$email, fullName=$fullName');
       
-      // Cek apakah email sudah ada
-      final existing = await client
-          .from('employees')
-          .select('id')
-          .eq('email', email)
-          .maybeSingle();
+      final res = await client.functions.invoke(
+        'create-employee',
+        body: {
+          'email': email,
+          'password': 'AbsenEase2026!',
+          'full_name': fullName,
+          'role': 'Staff',
+          'department': department,
+          'phone': phone,
+        },
+      );
+
+      debugPrint('AdminStaffService.addEmployee: response status=${res.status}');
+      debugPrint('AdminStaffService.addEmployee: response data=${res.data}');
       
-      if (existing != null) {
-        debugPrint('AdminStaffService.addEmployee: email already exists');
-        return false;
+      if (res.status == 200 || res.status == 201) {
+        debugPrint('AdminStaffService.addEmployee: SUCCESS');
+        return true;
       }
-      
-      // Insert langsung ke tabel employees tanpa auth
-      // Karyawan akan mendaftar sendiri nanti dan otomatis terhubung via email
-      await client.from('employees').insert({
-        'email': email,
-        'full_name': fullName,
-        'role': 'Staff',
-        'department': department,
-        'phone': phone,
-        'is_active': true,
-      });
-      debugPrint('AdminStaffService.addEmployee: success');
-      return true;
-    } catch (error) {
-      debugPrint('AdminStaffService.addEmployee error: $error');
+
+      debugPrint('AdminStaffService.addEmployee: FAILED with status ${res.status}');
+      return false;
+    } catch (error, stackTrace) {
+      debugPrint('AdminStaffService.addEmployee EXCEPTION: $error');
+      debugPrint('AdminStaffService.addEmployee STACKTRACE: $stackTrace');
       return false;
     }
   }
