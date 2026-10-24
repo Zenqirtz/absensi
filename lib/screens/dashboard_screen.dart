@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../core/config/supabase_config.dart';
 import '../core/theme/absentease_theme.dart';
 import '../core/widgets/absentease_brand.dart';
@@ -54,6 +55,63 @@ class _DashboardScreenState extends State<DashboardScreen> {
         });
       }
     } catch (_) {}
+  }
+
+  Future<void> _editDisplayName() async {
+    final controller = TextEditingController(
+      text: SupabaseConfig.clientOrNull?.auth.currentUser
+          ?.userMetadata?['full_name']
+          ?.toString(),
+    );
+    final name = await showDialog<String>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Nama lengkap'),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(labelText: 'Nama lengkap'),
+          onSubmitted: (value) => Navigator.pop(dialogContext, value.trim()),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Batal'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(dialogContext, controller.text.trim()),
+            child: const Text('Simpan'),
+          ),
+        ],
+      ),
+    );
+    controller.dispose();
+    if (!mounted || name == null) return;
+    if (name.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Nama lengkap tidak boleh kosong.')),
+      );
+      return;
+    }
+
+    try {
+      await SupabaseConfig.client.auth.updateUser(
+        UserAttributes(data: {'full_name': name}),
+      );
+      if (!mounted) return;
+      setState(() {
+        _profile = {...?_profile, 'full_name': name};
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Nama lengkap berhasil diperbarui.')),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal menyimpan nama: $e')),
+      );
+    }
   }
 
   Future<Position?> _getCurrentLocation() async {
@@ -213,25 +271,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                       const SizedBox(width: 9),
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              displayName,
-                              style: GoogleFonts.inter(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12,
+                        child: InkWell(
+                          onTap: _editDisplayName,
+                          borderRadius: BorderRadius.circular(4),
+                          child: Row(
+                            children: [
+                              Flexible(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      displayName,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.inter(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    Text(
+                                      displayRole,
+                                      style: GoogleFonts.inter(
+                                        color: Colors.white70,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Text(
-                              displayRole,
-                              style: GoogleFonts.inter(
+                              const SizedBox(width: 4),
+                              const Icon(
+                                Icons.edit_outlined,
+                                size: 12,
                                 color: Colors.white70,
-                                fontSize: 10,
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       Column(
@@ -447,23 +523,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              title,
-              style: GoogleFonts.poppins(
-                color: AbsenEaseTheme.textDark,
-                fontWeight: FontWeight.w700,
-                fontSize: 12,
+            Expanded(
+              child: Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.poppins(
+                  color: AbsenEaseTheme.textDark,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 12,
+                ),
               ),
             ),
             TextButton(
               onPressed: onTap,
               style: TextButton.styleFrom(
-                padding: EdgeInsets.zero,
+                padding: const EdgeInsets.only(left: 8),
                 minimumSize: Size.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               child: Text(
                 action,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.inter(
                   color: AbsenEaseTheme.magenta,
                   fontWeight: FontWeight.w700,
