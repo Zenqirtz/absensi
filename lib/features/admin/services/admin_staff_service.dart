@@ -29,22 +29,29 @@ class AdminStaffService {
   Future<bool> addEmployee({
     required String email,
     required String fullName,
-    required String password,
     String? department,
     String? phone,
   }) async {
     final client = _client;
     if (client == null) return false;
     try {
-      final authRes = await client.auth.signUp(
-        email: email,
-        password: password,
-        data: {'full_name': fullName, 'role': 'Staff'},
-      );
-      if (authRes.user == null) return false;
-      final uid = authRes.user!.id;
+      debugPrint('AdminStaffService.addEmployee: inserting employee $email...');
+      
+      // Cek apakah email sudah ada
+      final existing = await client
+          .from('employees')
+          .select('id')
+          .eq('email', email)
+          .maybeSingle();
+      
+      if (existing != null) {
+        debugPrint('AdminStaffService.addEmployee: email already exists');
+        return false;
+      }
+      
+      // Insert langsung ke tabel employees tanpa auth
+      // Karyawan akan mendaftar sendiri nanti dan otomatis terhubung via email
       await client.from('employees').insert({
-        'id': uid,
         'email': email,
         'full_name': fullName,
         'role': 'Staff',
@@ -52,8 +59,10 @@ class AdminStaffService {
         'phone': phone,
         'is_active': true,
       });
+      debugPrint('AdminStaffService.addEmployee: success');
       return true;
-    } catch (_) {
+    } catch (error) {
+      debugPrint('AdminStaffService.addEmployee error: $error');
       return false;
     }
   }

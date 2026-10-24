@@ -677,7 +677,6 @@ class _AdminPanelScreenState extends State<AdminPanelScreen>
   void _showAddEmployeeSheet() {
     final nameCtrl = TextEditingController();
     final emailCtrl = TextEditingController();
-    final passCtrl = TextEditingController();
     final deptCtrl = TextEditingController();
     final phoneCtrl = TextEditingController();
     bool saving = false;
@@ -706,9 +705,6 @@ class _AdminPanelScreenState extends State<AdminPanelScreen>
               _sheetField(emailCtrl, 'Email', Icons.email_outlined,
                   type: TextInputType.emailAddress),
               const SizedBox(height: 10),
-              _sheetField(passCtrl, 'Password', Icons.lock_outline,
-                  obscure: true),
-              const SizedBox(height: 10),
               _sheetField(deptCtrl, 'Divisi (opsional)', Icons.business_outlined),
               const SizedBox(height: 10),
               _sheetField(phoneCtrl, 'Telepon (opsional)', Icons.phone_outlined,
@@ -725,7 +721,6 @@ class _AdminPanelScreenState extends State<AdminPanelScreen>
                           final ok = await _staffService.addEmployee(
                             email: emailCtrl.text.trim(),
                             fullName: nameCtrl.text.trim(),
-                            password: passCtrl.text,
                             department: deptCtrl.text.trim(),
                             phone: phoneCtrl.text.trim(),
                           );
