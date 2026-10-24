@@ -66,6 +66,17 @@ class _AbsenEaseLoginScreenState extends State<AbsenEaseLoginScreen> {
         password: password,
       );
       if (response.user != null && mounted) {
+        // Sinkronkan nama dari user metadata ke profil employees
+        final metaName = response.user!.userMetadata?['full_name']?.toString().trim();
+        if (metaName != null && metaName.isNotEmpty && SupabaseConfig.isConfigured) {
+          try {
+            await SupabaseConfig.client
+                .from('employees')
+                .update({'full_name': metaName})
+                .eq('id', response.user!.id);
+          } catch (_) {}
+        }
+        if (!mounted) return;
         Navigator.pushReplacementNamed(context, '/dashboard');
       }
     } on AuthException catch (e) {
