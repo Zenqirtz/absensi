@@ -360,8 +360,10 @@ class _AdminPanelScreenState extends State<AdminPanelScreen>
   // ──────────────────────────────────────────────────────────
   Widget _buildAttendanceTab() {
     final present = _summary['present'] ?? 0;
-    final total = _summary['total_employees'] ?? 0;
-    final absent = (total - present).clamp(0, 9999);
+    final late = _summary['late'] ?? 0;
+    final leave = _summary['leave'] ?? 0;
+    final alpha = _summary['alpha'] ?? 0;
+    final total = _summary['total'] ?? 0;
 
     return ListView(
       padding: const EdgeInsets.all(16),
@@ -375,16 +377,36 @@ class _AdminPanelScreenState extends State<AdminPanelScreen>
               icon: Icons.check_circle_outline,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
           Expanded(
             child: _summaryCard(
-              title: 'Belum Hadir',
-              value: '$absent',
-              color: const Color(0xFFEF4444),
-              icon: Icons.cancel_outlined,
+              title: 'Telat',
+              value: '$late',
+              color: const Color(0xFFF97316),
+              icon: Icons.schedule_rounded,
             ),
           ),
-          const SizedBox(width: 12),
+        ]),
+        const SizedBox(height: 12),
+        Row(children: [
+          Expanded(
+            child: _summaryCard(
+              title: 'Izin',
+              value: '$leave',
+              color: const Color(0xFF3B82F6),
+              icon: Icons.event_available_rounded,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: _summaryCard(
+              title: 'Alpha',
+              value: '$alpha',
+              color: const Color(0xFFEF4444),
+              icon: Icons.close_rounded,
+            ),
+          ),
+          const SizedBox(width: 8),
           Expanded(
             child: _summaryCard(
               title: 'Total',
